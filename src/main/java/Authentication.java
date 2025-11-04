@@ -1,14 +1,15 @@
-package pages;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.Objects;
 
-public class LoginPage {
+public class Authentication {
     private final WebDriver driver;
     private WebDriverWait wait;
     private final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
@@ -18,7 +19,7 @@ public class LoginPage {
     private static final String FIREBASE_DB = "firebaseLocalStorageDb";
     private static final String FIREBASE_STORE = "firebaseLocalStorage";
 
-    public LoginPage(WebDriver driver) {
+    public Authentication(WebDriver driver) {
         this.driver = driver;
         this.js = (JavascriptExecutor) driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -43,22 +44,24 @@ public class LoginPage {
                       2) Use realizarLoginComKeyValue(key, value) passando as strings copiadas do IndexedDB.
                     """);
         }
+
         realizarLoginComKeyValue(key, value);
     }
 
     /**
      * Injeção robusta: espera o indexedDB existir, injeta o registro e recarrega a página.
-     * @param firebaseKey  chave exata do IndexedDB (ex: "firebase:authUser:...:[DEFAULT]")
+     *
+     * @param firebaseKey   chave exata do IndexedDB (ex: "firebase:authUser:...:[DEFAULT]")
      * @param firebaseValue JSON bruto (o objeto inteiro) como string (não escapado)
      */
-    private void realizarLoginComKeyValue(String firebaseKey, String firebaseValue) {
+    public void realizarLoginComKeyValue(String firebaseKey, String firebaseValue) {
         Objects.requireNonNull(firebaseKey, "firebaseKey == null");
         Objects.requireNonNull(firebaseValue, "firebaseValue == null");
 
         driver.manage().window().maximize();
-
         // aumentar um pouco o script timeout porque indexedDB pode demorar
         driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(60));
+
         abrir();
 
         // 1) espera até que o indexedDB esteja visível/ disponível (evita script timeout)
@@ -95,8 +98,8 @@ public class LoginPage {
                         "    tx.objectStore('" + FIREBASE_STORE + "').put(value);" +
                         "  } catch(err) { if(!internalTimed){ clearTimeout(t); done('INJECT_ERROR:' + err.message); }}" +
                         "};";
-        Object result;
 
+        Object result;
         try {
             result = js.executeAsyncScript(injectScript, firebaseKey, firebaseValue);
         } catch (Exception ex) {
@@ -113,7 +116,15 @@ public class LoginPage {
 
         // 3) recarrega a página para que o app leia o IndexedDB
         driver.navigate().refresh();
-        driver.get("https://testes.codefolio.com.br/dashboard");
+
+        // 4) espera um elemento/condição que confirme login — ajuste para sua app
+        // aqui uso um wait genérico: aguarda até o firebase criar o DB de usuário (exemplo).
+        // Troque pela condição real da sua aplicação (ex.: driver.findElement(By.id("avatar")))
+
+        driver.get("https://react-na-pratica.web.app/dashboard");
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+
+        System.out.println("Login automático concluído (injetado via IndexedDB).");
     }
 
     /**

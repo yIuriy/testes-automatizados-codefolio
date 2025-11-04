@@ -4,23 +4,24 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.DashboardPage;
-import pages.LoginPage;
 
-public class PerfilTest {
+public class ProfileTest {
     WebDriver driver;
-    LoginPage loginPage;
+    Authentication authentication;
     DashboardPage dashboardPage;
 
     @BeforeEach
     void setup() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
-        loginPage = new LoginPage(driver);
+        authentication = new Authentication(driver);
         dashboardPage = new DashboardPage(driver);
-        loginPage.realizarLoginViaIndexedBD();
+        authentication.realizarLoginViaIndexedBD();
     }
 
     @Test
     void testLogin() throws InterruptedException {
+        Thread.sleep(5000);
+
     }
 }
