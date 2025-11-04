@@ -3,7 +3,7 @@ package pages;
 import org.openqa.selenium.WebDriver;
 
 public class PerfilPage {
-    private WebDriver driver;
+    private final WebDriver driver;
 
     public PerfilPage(WebDriver driver) {
         this.driver = driver;
