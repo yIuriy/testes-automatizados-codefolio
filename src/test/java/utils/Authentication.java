@@ -1,8 +1,8 @@
+package utils;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -30,6 +30,36 @@ public class Authentication {
     }
 
     /**
+     * Método baseado no exemplo do professor, não funcionou corretamente no meu caso, prefira {@code
+     * realizarLoginViaIndexedDb}.
+     *
+     * @see Authentication#realizarLoginViaIndexedBD()
+     */
+    public void realizarLoginViaLocalStorage(){
+        String key = dotenv.get("FIREBASE_KEY");
+        String value = dotenv.get("FIREBASE_VALUE");
+        driver.manage().window().maximize();
+        // 1. Carrega o domínio
+       driver.get("https://testes.codefolio.com.br/");
+        // 2. Injeta os dados no Local Storage
+        System.out.println("Injetando dados de autenticação no Local Storage...");
+        try {
+            js.executeScript("window.localStorage.setItem(arguments[0], arguments[1]);",
+                    key,
+                    value);
+            System.out.println("Injeção no Local Storage bem-sucedida.");
+
+        } catch (Exception e) {
+            System.out.println("Falha crítica ao injetar no Local Storage: " + e.getMessage());
+            driver.quit();
+            throw new RuntimeException("Falha no setup do Local Storage", e);
+        }
+        // 3. Recarrega a página (agora com o token injetado)
+        System.out.println("Recarregando a página...");
+        driver.navigate().refresh();
+    }
+
+    /**
      * Principal entry — tenta injetar vindo do .env; se não existir, lança explicação
      */
     public void realizarLoginViaIndexedBD() {
@@ -44,7 +74,6 @@ public class Authentication {
                       2) Use realizarLoginComKeyValue(key, value) passando as strings copiadas do IndexedDB.
                     """);
         }
-
         realizarLoginComKeyValue(key, value);
     }
 
@@ -54,7 +83,7 @@ public class Authentication {
      * @param firebaseKey   chave exata do IndexedDB (ex: "firebase:authUser:...:[DEFAULT]")
      * @param firebaseValue JSON bruto (o objeto inteiro) como string (não escapado)
      */
-    public void realizarLoginComKeyValue(String firebaseKey, String firebaseValue) {
+    private void realizarLoginComKeyValue(String firebaseKey, String firebaseValue) {
         Objects.requireNonNull(firebaseKey, "firebaseKey == null");
         Objects.requireNonNull(firebaseValue, "firebaseValue == null");
 

@@ -17,5 +17,9 @@ public class DashboardPage {
     public void abrirMenuDeOpcoesPerfil(){
         driver.findElement(By.xpath("//*[@id=\":r5:\"]/div/img")).click();
     }
+
+    public void abrirMenuGerenciamentoDeCursos(){
+        driver.findElement(By.xpath("/html/body/div[2]/div[3]/ul/li[2]")).click();
+    }
 }
 

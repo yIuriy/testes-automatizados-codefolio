@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.DashboardPage;
+import utils.Authentication;
 
 public class ProfileTest {
     WebDriver driver;
