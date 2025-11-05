@@ -1,6 +1,7 @@
 package pages;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -42,14 +43,21 @@ public class ManageCoursePage {
         menuAlunos.click();
     }
 
-    @AfterEach
-    void close() {
-        try {
-            Thread.sleep(20000);
-            driver.close();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    public WebElement getInputFiltrar() {
+        return wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[contains(@placeholder, 'Buscar')]")));
+    }
+
+    public void inserirTextoNoFiltrar(String texto) {
+        WebElement inputFiltrar = getInputFiltrar();
+        Utilitarios.centralizarElementoNaTela(inputFiltrar, driver);
+        Assertions.assertNotNull(getInputFiltrar());
+        inputFiltrar.sendKeys(texto);
+    }
+
+    public WebElement localizarLinhaDoAlunoPorNome(String nome) {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[.//p[contains(text(),'" + nome + "')]]")
+        ));
     }
 }
 
