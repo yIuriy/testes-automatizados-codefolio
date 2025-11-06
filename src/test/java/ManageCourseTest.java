@@ -45,7 +45,7 @@ public class ManageCourseTest {
         try {
             Thread.sleep(5000);
             irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             manageCoursePage.inserirTextoNoFiltrar("Iuri");
 
@@ -74,7 +74,7 @@ public class ManageCourseTest {
         try {
             Thread.sleep(5000);
             irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             manageCoursePage.inserirTextoNoFiltrar("Iuri");
             WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome("Iuri");
@@ -113,6 +113,32 @@ public class ManageCourseTest {
             System.out.println(e.getMessage());
         }
     }
+
+    // Passou
+    @Test
+    void VT17_2() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso sem Alunos");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            js.executeScript("window.scrollBy({top: 500})");
+
+            WebElement p = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains" +
+                    "(normalize-space(), 'Exibindo')]")));
+            List<WebElement> div = p.findElement(By.xpath("..")).findElements(By.tagName("p"));
+
+            String numeroDeAlunosExibidos = div.get(0).getText();
+            String msgNenhumAlunoMatriculado = div.get(1).getText();
+
+            assertEquals("Exibindo 0 de 0 estudantes", numeroDeAlunosExibidos);
+            assertEquals("Nenhum estudante matriculado neste curso.", msgNenhumAlunoMatriculado);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     @NotNull
     private Aluno construirAlunoAPartirDoTableRow(List<WebElement> elementosDentroDoTrAluno) {

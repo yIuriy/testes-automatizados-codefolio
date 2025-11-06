@@ -25,10 +25,16 @@ public class ManageCoursePage {
         driver.get("https://testes.codefolio.com.br/manage-courses");
     }
 
-    public void clicarBotaoGerenciarCurso() {
+    public void clicarBotaoGerenciarCursoDoPrimeiroCurso    () {
         Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[normalize-space()='Gerenciar Curso']")
         ))).click();
+    }
+
+    public void clicarBotaoGerenciarCursoPorNomeDoCurso(String nome) {
+        WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+                "//div[contains(@class, 'MuiGrid-item') and .//h6[contains(normalize-space(), '" + nome + "')]]")));
+        div.findElement(By.xpath(".//button[contains(., 'Gerenciar Curso')]")).click();
     }
 
     public void localizarEClicarNoMenuPorNome(String nomeDoMenu) {
