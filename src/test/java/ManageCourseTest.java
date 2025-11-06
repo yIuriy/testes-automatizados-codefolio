@@ -139,6 +139,32 @@ public class ManageCourseTest {
         }
     }
 
+    // Passou
+    @Test
+    void CT17_3() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+
+            WebElement p = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains" +
+                    "(normalize-space(), 'Exibindo')]")));
+
+            String[] split = p.getText().split(" ");
+            int alunosExibidosNoMomento = Integer.parseInt(split[1]);
+            int totalDeAlunosExistentes = Integer.parseInt(split[3]);
+
+            List<WebElement> linhasDosAlunos = driver.findElements(By.xpath("//tr[contains(@class, " +
+                    "'MuiTableRow-hover')]"));
+
+            assertEquals(alunosExibidosNoMomento, linhasDosAlunos.size());
+            assertEquals(totalDeAlunosExistentes, linhasDosAlunos.size());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     @NotNull
     private Aluno construirAlunoAPartirDoTableRow(List<WebElement> elementosDentroDoTrAluno) {
