@@ -1,11 +1,7 @@
 package pages;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.Utilitarios;
@@ -35,9 +31,9 @@ public class ManageCoursePage {
         ))).click();
     }
 
-    public void localizarEClicarNoMenuAlunos() {
+    public void localizarEClicarNoMenuPorNome(String nomeDoMenu) {
         WebElement menuAlunos = wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(
-                "//*[contains(text(),'Alunos')]"))));
+                "//*[contains(text(),'" + nomeDoMenu + "')]"))));
         Utilitarios.centralizarElementoNaTela(menuAlunos, driver);
 
         assert menuAlunos != null;
@@ -50,9 +46,17 @@ public class ManageCoursePage {
 
     public void inserirTextoNoFiltrar(String texto) {
         WebElement inputFiltrar = getInputFiltrar();
+        Assertions.assertNotNull(inputFiltrar);
         Utilitarios.centralizarElementoNaTela(inputFiltrar, driver);
-        Assertions.assertNotNull(getInputFiltrar());
         inputFiltrar.sendKeys(texto);
+    }
+
+    public void limparTextoNoFiltrar() {
+        WebElement inputFiltrar = getInputFiltrar();
+        Assertions.assertNotNull(inputFiltrar);
+        Utilitarios.centralizarElementoNaTela(inputFiltrar, driver);
+        inputFiltrar.sendKeys(Keys.CONTROL + "a");
+        inputFiltrar.sendKeys(Keys.DELETE);
     }
 
     public WebElement localizarLinhaDoAlunoPorNome(String nome) {
