@@ -13,9 +13,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.DashboardPage;
 import pages.ManageCoursePage;
 import utils.Authentication;
+import utils.Utilitarios;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,6 +56,7 @@ public class ManageCourseTest {
             assertNotNull(trAluno);
 
             List<WebElement> elementosDentroDoTrAluno = trAluno.findElements(By.cssSelector("th, td"));
+
             Aluno aluno = new Aluno(
                     elementosDentroDoTrAluno.getFirst().getText(),
                     elementosDentroDoTrAluno.get(1).getText(),
@@ -67,6 +70,8 @@ public class ManageCourseTest {
             assertEquals("100%", aluno.progresso());
             assertEquals("Concluído", aluno.status());
             assertEquals("Admin", aluno.role());
+            assertTrue(manageCoursePage.verificarSeExisteIconeDeDeletarAluno(elementosDentroDoTrAluno), "Verifica se " +
+                    "existe o ícone de deletar na linha do Aluno em questão");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

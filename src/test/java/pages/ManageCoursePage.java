@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.Utilitarios;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 
 public class ManageCoursePage {
@@ -58,6 +59,20 @@ public class ManageCoursePage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//tr[.//p[contains(text(),'" + nome + "')]]")
         ));
+    }
+
+    public boolean verificarSeExisteIconeDeDeletarAluno(List<WebElement> elementos) {
+        for (WebElement elemento : elementos) {
+            List<WebElement> buttons = elemento.findElements(By.cssSelector("button, input[type='button']"));
+            if (!buttons.isEmpty()) {
+                for (WebElement elemento1 : buttons) {
+                    WebElement webElement = elemento1.findElement(By.cssSelector("[data-testid]"));
+                    if (Objects.requireNonNull(webElement.getAttribute("data-testid")).equalsIgnoreCase("DeleteIcon"))
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 }
 
