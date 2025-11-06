@@ -229,6 +229,28 @@ public class ManageCourseTest {
         }
     }
 
+    @Test
+    @DisplayName("Clicar para Excluir aluno, e verificar se o prompt exibe o nome do aluno a ser excluído corretamente")
+    void CT18_2() {
+        try {
+            Thread.sleep(5000);
+            String nomeDoAluno = "Zildo Tester Java";
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            js.executeScript("window.scrollBy({top: 500})");
+            WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
+            manageCoursePage.clicarIconeDeExcluirAluno(trAluno);
+
+            String textoExibido = manageCoursePage.localizarCaixaDeTextoConfirmarCancelarExclusao().findElement(By.tagName("p")).getText();
+
+            assertEquals("Tem certeza que deseja remover Zildo Tester Java do curso?", textoExibido);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     @NotNull
     private Aluno construirAlunoAPartirDoTableRow(List<WebElement> elementosDentroDoTrAluno) {
