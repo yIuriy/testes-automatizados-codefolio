@@ -3,10 +3,7 @@ import model.Aluno;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -16,6 +13,7 @@ import utils.Authentication;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -160,6 +158,37 @@ public class ManageCourseTest {
 
             assertEquals(alunosExibidosNoMomento, linhasDosAlunos.size());
             assertEquals(totalDeAlunosExistentes, linhasDosAlunos.size());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Falhou
+    @Test
+    void CT18() {
+        try {
+            Thread.sleep(5000);
+            String nomeDoAluno = "Zildo Tester Java";
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            js.executeScript("window.scrollBy({top: 500})");
+            WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
+            manageCoursePage.clicarIconeDeExcluirAluno(trAluno);
+            manageCoursePage.clicarBotaoConfirmarExclusaoDeAluno();
+
+            Thread.sleep(2000);
+            driver.navigate().refresh();
+            Thread.sleep(2000);
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Thread.sleep(1000);
+            js.executeScript("window.scrollBy({top: 500})");
+
+            // Não deve localizar o aluno, lançando uma exceção
+            assertThrows(TimeoutException.class, () -> {
+                manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
+            });
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

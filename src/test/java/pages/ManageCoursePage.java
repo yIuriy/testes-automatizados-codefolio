@@ -1,5 +1,6 @@
 package pages;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -25,7 +26,7 @@ public class ManageCoursePage {
         driver.get("https://testes.codefolio.com.br/manage-courses");
     }
 
-    public void clicarBotaoGerenciarCursoDoPrimeiroCurso    () {
+    public void clicarBotaoGerenciarCursoDoPrimeiroCurso() {
         Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[normalize-space()='Gerenciar Curso']")
         ))).click();
@@ -83,6 +84,28 @@ public class ManageCoursePage {
             }
         }
         return false;
+    }
+
+    public void clicarIconeDeExcluirAluno(WebElement trAluno) {
+        Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(trAluno.findElement(By.cssSelector("button"))))).click();
+    }
+
+    @NotNull
+    public WebElement localizarCaixaDeTextoConfirmarCancelarExclusao() {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h2[contains" +
+                "(normalize-space(), " +
+                "'Confirmar exclusão')]"))).findElement(By.xpath(".."));
+    }
+
+    public void clicarBotaoConfirmarExclusaoDeAluno() {
+        WebElement div = localizarCaixaDeTextoConfirmarCancelarExclusao();
+        div.findElements(By.cssSelector("button")).get(1).click();
+
+    }
+
+    public void clicarBotaoCancelarExclusaoDeAluno() {
+        WebElement div = localizarCaixaDeTextoConfirmarCancelarExclusao();
+        div.findElements(By.cssSelector("button")).getFirst().click();
     }
 }
 
