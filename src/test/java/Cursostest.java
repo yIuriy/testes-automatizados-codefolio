@@ -1,6 +1,6 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test; 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -12,8 +12,7 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
-class CursosTest {
+public class Cursostest { 
 
     WebDriver driver;
     Authentication authentication;
@@ -26,41 +25,54 @@ class CursosTest {
         driver = new ChromeDriver();
         authentication = new Authentication(driver);
         dashboardPage = new DashboardPage(driver);
-        
-        // O login via IndexedDB já nos leva para a /dashboard
         authentication.realizarLoginViaIndexedBD(); 
-        
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     /**
-     * Teste para o Caso de Teste CT-33: Acesso a Cursos Recomendados
-     * Objetivo: Verificar se o usuário pode acessar um curso sem PIN
-     * a partir da lista de recomendados.
+     * Teste para o Caso de Teste CT-33: Acesso a (um) Curso Recomendado.
+     */
+    @Test 
+    void CT33_acessarCursoRecomendadoSemPin() throws InterruptedException {
+        String nomeDoCurso = "Curso Teste Grupo 21762726476531"; 
+        dashboardPage.acessarCursoRecomendadoPorNome(nomeDoCurso);
+        
+        wait.until(ExpectedConditions.not(
+                ExpectedConditions.urlContains("/dashboard")
+        ));
+        
+        String urlAtual = driver.getCurrentUrl();
+        assertTrue(urlAtual.contains("/classes"), "A URL não mudou para a página /classes.");
+        Thread.sleep(1000); 
+    }
+
+    /**
+     * Teste para o Caso de Teste CT-34: Acesso a Cursos com PIN.
+     * Tenta acessar o "Grupo -1" com o PIN "grupo1".
      */
     @Test
-    void CT33_acessarCursoRecomendadoSemPin() throws InterruptedException {
-        // O @BeforeEach já nos autenticou e estamos na Dashboard.
+    void CT34_acessarCursoComPin() throws InterruptedException {
         
-        // Com base no seu HTML, "Curso Teste Grupo 21762726476531" não tem cadeado.
-        String nomeDoCurso = "Curso Teste Grupo 21762726476531";
+        // --- CORREÇÃO AQUI ---
+        // O nome do curso no HTML é "Grupo -1" (com espaço e número 1)
+        String nomeDoCursoComPin = "Grupo -1";
+        // --- FIM DA CORREÇÃO ---
 
-        // 1. Chama o método da Page Object para encontrar e clicar no curso
-        dashboardPage.acessarCursoRecomendadoPorNome(nomeDoCurso);
+        String pinCorreto = "grupo1";
 
-        // 2. Verifica o Resultado Esperado
-        // (O usuário deve conseguir acessá-lo)
-        // Verificamos se a URL mudou da dashboard para a página do curso.
+        // Passo 1 e 2: Clica em "Acessar" no curso protegido
+        dashboardPage.acessarCursoRecomendadoPorNome(nomeDoCursoComPin);
         
-        // Espera a URL não ser mais a da dashboard
+        // Passo 3 e 4: Insere o PIN e confirma
+        dashboardPage.inserirPinParaCurso(pinCorreto);
+
+        // Resultado Esperado: O sistema deve liberar o acesso
         wait.until(ExpectedConditions.not(
                 ExpectedConditions.urlContains("/dashboard")
         ));
 
-        // Confirma que fomos para a página correta (assumindo que contenha /course)
         String urlAtual = driver.getCurrentUrl();
-        assertTrue(urlAtual.contains("/classes"), "A URL não mudou para a página /classes.");
-
-        Thread.sleep(1000); // Pausa para ver o resultado
+        assertTrue(urlAtual.contains("/classes"), "A URL não mudou para /classes após inserir o PIN.");
+        Thread.sleep(1000); // Pausa
     }
 }

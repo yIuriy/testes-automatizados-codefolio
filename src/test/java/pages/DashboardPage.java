@@ -10,12 +10,11 @@ import java.time.Duration;
 
 public class DashboardPage {
     private final WebDriver driver;
-    private final WebDriverWait wait; // <-- Adicionado
+    private final WebDriverWait wait; 
 
     public DashboardPage(WebDriver driver) {
         this.driver = driver;
-        // Inicializa o wait
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // <-- Adicionado
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
     }
 
     public void abrir(){
@@ -30,18 +29,14 @@ public class DashboardPage {
         driver.findElement(By.xpath("/html/body/div[2]/div[3]/ul/li[2]")).click();
     }
 
-    //MÉTODO PARA O CT-33
     /**
      * Localiza um curso na seção "Cursos Recomendados" pelo nome e clica em "Acessar".
      * @param nomeDoCurso O nome exato do curso a ser acessado.
      */
     public void acessarCursoRecomendadoPorNome(String nomeDoCurso) {
-        // Espera o título "Cursos Recomendados"
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//h6[contains(text(), 'Cursos Recomendados')]")
         ));
-
-        // Encontra o botão "Acessar" dentro do card do curso
         WebElement botaoAcessar = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//h6[contains(text(), '" + nomeDoCurso + "')]" +
                          "/ancestor::div[contains(@class, 'MuiCard-root')]" +
@@ -49,5 +44,25 @@ public class DashboardPage {
         ));
         
         botaoAcessar.click();
+    }
+
+    // --- MÉTODO CORRIGIDO PARA O CT-34 ---
+    /**
+     * Espera o modal do PIN aparecer, digita o PIN e clica em Enviar.
+     * @param pin O PIN do curso.
+     */
+    public void inserirPinParaCurso(String pin) {
+        // CORREÇÃO: Usando o placeholder "PIN de Acesso"
+        WebElement inputPin = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[@placeholder='PIN de Acesso']")
+        ));
+        
+        inputPin.sendKeys(pin);
+        
+        WebElement botaoEnviar = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//div[@role='dialog']//button[contains(text(), 'Enviar')]")
+        ));
+        
+        botaoEnviar.click();
     }
 }
