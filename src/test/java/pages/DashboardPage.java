@@ -11,7 +11,8 @@ import java.time.Duration;
 public class DashboardPage {
     private final WebDriver driver;
     private final WebDriverWait wait; 
-
+    
+    
     public DashboardPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10)); 
@@ -54,15 +55,15 @@ public class DashboardPage {
     public void inserirPinParaCurso(String pin) {
         // CORREÇÃO: Usando o placeholder "PIN de Acesso"
         WebElement inputPin = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//input[@placeholder='PIN de Acesso']")
+                By.xpath("//label[text()='PIN de Acesso']/following-sibling::div/input")
         ));
         
         inputPin.sendKeys(pin);
         
-        WebElement botaoEnviar = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//div[@role='dialog']//button[contains(text(), 'Enviar')]")
+       WebElement botaoEnviar = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//div[contains(@class, 'css-1mu702d')]//button[contains(text(), 'Enviar')]")
         ));
-        
+
         botaoEnviar.click();
     }
 }

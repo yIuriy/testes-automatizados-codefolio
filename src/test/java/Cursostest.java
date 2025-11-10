@@ -34,7 +34,7 @@ public class Cursostest {
      */
     @Test 
     void CT33_acessarCursoRecomendadoSemPin() throws InterruptedException {
-        String nomeDoCurso = "Curso Teste Grupo 21762726476531"; 
+        String nomeDoCurso = "OneFrameMan"; 
         dashboardPage.acessarCursoRecomendadoPorNome(nomeDoCurso);
         
         wait.until(ExpectedConditions.not(
@@ -48,15 +48,13 @@ public class Cursostest {
 
     /**
      * Teste para o Caso de Teste CT-34: Acesso a Cursos com PIN.
-     * Tenta acessar o "Grupo -1" com o PIN "grupo1".
+     * Tenta acessar o "Grupo-01" com o PIN "grupo1".
      */
     @Test
     void CT34_acessarCursoComPin() throws InterruptedException {
         
-        // --- CORREÇÃO AQUI ---
-        // O nome do curso no HTML é "Grupo -1" (com espaço e número 1)
-        String nomeDoCursoComPin = "Grupo -1";
-        // --- FIM DA CORREÇÃO ---
+        String nomeDoCursoComPin = "Grupo-01";
+        
 
         String pinCorreto = "grupo1";
 
