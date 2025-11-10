@@ -40,7 +40,7 @@ public class ProfileTest {
 
 
 
-    @Test
+    @Test //Falhou
     void CT01_edicaoDePerfil_ComSeletoresCorretos() throws InterruptedException {
         // Pré-condições: Driver e login (do @BeforeEach)
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
