@@ -44,9 +44,9 @@ public class SlidesCourseTest {
     @Test
     void CT09() {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Grupo 01");
             manageCoursePage.localizarEClicarNoMenuPorNome("Slides");
             manageSlidePage.clicarBotaoEditarSlideDoPrimeiroSlide();
             manageSlidePage.inserirTituloNoSlide("Furret");
