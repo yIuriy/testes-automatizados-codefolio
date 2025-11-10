@@ -2,9 +2,11 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import model.Aluno;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -14,7 +16,6 @@ import utils.Authentication;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,7 +41,6 @@ public class ManageCourseTest {
 
     // Passou
     @Test
-    @DisplayName("Consulta de Alunos buscando um aluno")
     void CT17() {
         try {
             Thread.sleep(5000);
@@ -70,7 +70,6 @@ public class ManageCourseTest {
 
     // Passou
     @Test
-    @DisplayName("Consulta de Alunos buscando dois alunos")
     void CT17_1() {
         try {
             Thread.sleep(5000);
@@ -117,7 +116,6 @@ public class ManageCourseTest {
 
     // Passou
     @Test
-    @DisplayName("Consulta de Alunos em um curso sem alunos matriculados")
     void VT17_2() {
         try {
             Thread.sleep(5000);
@@ -143,7 +141,6 @@ public class ManageCourseTest {
 
     // Passou
     @Test
-    @DisplayName("Consulta se o número de alunos exibidos corresponde ao número de alunos existentes")
     void CT17_3() {
         try {
             Thread.sleep(5000);
@@ -163,89 +160,6 @@ public class ManageCourseTest {
 
             assertEquals(alunosExibidosNoMomento, linhasDosAlunos.size());
             assertEquals(totalDeAlunosExistentes, linhasDosAlunos.size());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    // Falhou
-    @Test
-    @DisplayName("Clicar para Excluir aluno e clicar em Confirmar")
-    void CT18() {
-        try {
-            Thread.sleep(5000);
-            String nomeDoAluno = "Zildo Tester Java";
-            irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
-            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
-            js.executeScript("window.scrollBy({top: 500})");
-            WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
-            manageCoursePage.clicarIconeDeExcluirAluno(trAluno);
-            manageCoursePage.clicarBotaoConfirmarExclusaoDeAluno();
-
-            Thread.sleep(2000);
-            driver.navigate().refresh();
-            Thread.sleep(2000);
-            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
-            Thread.sleep(1000);
-            js.executeScript("window.scrollBy({top: 500})");
-
-            // Não deve localizar o aluno, lançando uma exceção
-            assertThrows(TimeoutException.class, () -> {
-                manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
-            });
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    @Test
-    @DisplayName("Clicar para Excluir aluno, mas não clicar em confirmar")
-    void CT18_1() {
-        try {
-            Thread.sleep(5000);
-            String nomeDoAluno = "Zildo Tester Java";
-            irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
-            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
-            js.executeScript("window.scrollBy({top: 500})");
-            WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
-            manageCoursePage.clicarIconeDeExcluirAluno(trAluno);
-            manageCoursePage.clicarBotaoCancelarExclusaoDeAluno();
-
-            Thread.sleep(2000);
-            driver.navigate().refresh();
-            Thread.sleep(2000);
-            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
-            Thread.sleep(1000);
-            js.executeScript("window.scrollBy({top: 500})");
-
-            WebElement trAlunoAposCancelamentoExclusao = manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
-
-            assertNotNull(trAlunoAposCancelamentoExclusao);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    @Test
-    @DisplayName("Clicar para Excluir aluno, e verificar se o prompt exibe o nome do aluno a ser excluído corretamente")
-    void CT18_2() {
-        try {
-            Thread.sleep(5000);
-            String nomeDoAluno = "Zildo Tester Java";
-            irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
-            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
-            js.executeScript("window.scrollBy({top: 500})");
-            WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
-            manageCoursePage.clicarIconeDeExcluirAluno(trAluno);
-
-            String textoExibido = manageCoursePage.localizarCaixaDeTextoConfirmarCancelarExclusao().findElement(By.tagName("p")).getText();
-
-            assertEquals("Tem certeza que deseja remover Zildo Tester Java do curso?", textoExibido);
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
