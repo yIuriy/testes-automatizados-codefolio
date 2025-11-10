@@ -3,10 +3,7 @@ import model.Aluno;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -183,4 +180,133 @@ public class ManageCourseTest {
         wait.until(ExpectedConditions.urlContains("/manage-courses"));
     }
 
+    @Test
+    void CT25() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+
+            WebElement abaAvaliacoes = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Avaliações')]"))
+            );
+            abaAvaliacoes.click();
+            WebElement botaoAtribuirNota = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Atribuir Nota')]"))
+            );
+            botaoAtribuirNota.click();
+            WebElement linhaIuri = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//tr[.//text()[contains(.,'Iuri Da Silva Fernandes')]]")
+            ));
+            WebElement campoNota = linhaIuri.findElement(By.xpath(".//input"));
+            campoNota.clear();
+            campoNota.sendKeys("6.5");
+            js.executeScript("arguments[0].blur();", campoNota);
+            WebElement iconeCheck = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath(".//*[name()='svg' and @data-testid='CheckCircleIcon']")
+            ));
+            assertTrue(iconeCheck.isDisplayed(), "O ícone de confirmação deve aparecer após salvar a nota.");
+
+            System.out.println("CT25 passou");
+
+        } catch (Exception e) {
+            System.out.println("Falha no CT25 ");
+        }
+    }
+
+    @Test
+    void CT25_1() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+
+            WebElement abaAvaliacoes = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Avaliações')]"))
+            );
+            abaAvaliacoes.click();
+            WebElement botaoAtribuirNota = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Atribuir Nota')]"))
+            );
+            botaoAtribuirNota.click();
+            WebElement linhaAluno = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//tr[.//text()[contains(.,'Gustavo Borges Arrussul Veiga')]]")
+            ));
+            WebElement campoNota = linhaAluno.findElement(By.xpath(".//input"));
+            String notaAnterior = campoNota.getAttribute("value");
+            campoNota.click();
+            campoNota.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+            campoNota.sendKeys("8.0");
+            js.executeScript("arguments[0].blur();", campoNota);
+            WebElement iconeCheck = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath(".//*[name()='svg' and @data-testid='CheckCircleIcon']"))
+            );
+            assertTrue(iconeCheck.isDisplayed(), "Ícone de sucesso deve aparecer após atualizar a nota.");
+            String notaAtualizada = campoNota.getAttribute("value");
+            assertEquals("8.0", notaAtualizada, "A nota do aluno deve ter sido atualizada para 8.0");
+
+            System.out.println("CT25.1 passou, nota alterada com sucesso.");
+
+        } catch (Exception e) {
+            System.out.println("Falha no CT25.1");
+        }
+    }
+
+    @Test
+    void CT25_2_naoPermitirCampoNotaVazio() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+
+            WebElement abaAvaliacoes = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Avaliações')]"))
+            );
+            abaAvaliacoes.click();
+            WebElement botaoAtribuirNota = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Atribuir Nota')]"))
+            );
+            botaoAtribuirNota.click();
+            WebElement linhaAluno = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//tr[.//text()[contains(.,'Gustavo Borges Arrussul Veiga')]]")
+            ));
+            WebElement campoNota = linhaAluno.findElement(By.xpath(".//input"));
+            String notaAnterior = campoNota.getAttribute("value");
+
+            campoNota.click();
+            campoNota.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+            campoNota.sendKeys(Keys.DELETE);
+
+            js.executeScript("arguments[0].blur();", campoNota);
+
+            Thread.sleep(1500);
+            String valorDepois = campoNota.getAttribute("value");
+
+            driver.navigate().back();
+            WebElement abaAvaliacoes2 = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Avaliações')]"))
+            );
+            abaAvaliacoes2.click();
+
+            WebElement botaoAtribuirNota2 = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(., 'Atribuir Nota')]"))
+            );
+            botaoAtribuirNota2.click();
+
+            WebElement linhaAluno2 = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//tr[.//text()[contains(.,'Gustavo Borges Arrussul Veiga')]]")
+            ));
+
+            WebElement campoNota2 = linhaAluno2.findElement(By.xpath(".//input"));
+            String notaAtualAposVoltar = campoNota2.getAttribute("value");
+
+            assertEquals(notaAnterior, notaAtualAposVoltar,
+                    "A nota anterior deve permanecer após tentar apagar e voltar à página.");
+
+            System.out.println("CT25.2 passou: campo vazio não foi salvo.");
+
+        } catch (Exception e) {
+            System.out.println("Falha no CT25.2");
+        }
+    }
 }
