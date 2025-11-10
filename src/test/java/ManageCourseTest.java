@@ -2,6 +2,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import model.Aluno;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -162,7 +163,6 @@ public class ManageCourseTest {
         }
     }
 
-
     @NotNull
     private Aluno construirAlunoAPartirDoTableRow(List<WebElement> elementosDentroDoTrAluno) {
         return new Aluno(
@@ -178,6 +178,88 @@ public class ManageCourseTest {
         dashboardPage.abrirMenuDeOpcoesPerfil();
         dashboardPage.abrirMenuGerenciamentoDeCursos();
         wait.until(ExpectedConditions.urlContains("/manage-courses"));
+    }
+
+    @Test
+    @DisplayName("Clicar para Excluir aluno e clicar em Confirmar")
+    void CT18() {
+        try {
+            Thread.sleep(5000);
+            String nomeDoAluno = "Zildo Tester Java";
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            js.executeScript("window.scrollBy({top: 500})");
+            WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
+            manageCoursePage.clicarIconeDeExcluirAluno(trAluno);
+            manageCoursePage.clicarBotaoConfirmarExclusaoDeAluno();
+
+            Thread.sleep(2000);
+            driver.navigate().refresh();
+            Thread.sleep(2000);
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Thread.sleep(1000);
+            js.executeScript("window.scrollBy({top: 500})");
+
+            // Não deve localizar o aluno, lançando uma exceção
+            assertThrows(TimeoutException.class, () -> {
+                manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
+            });
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Clicar para Excluir aluno, mas não clicar em confirmar")
+    void CT18_1() {
+        try {
+            Thread.sleep(5000);
+            String nomeDoAluno = "Zildo Tester Java";
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            js.executeScript("window.scrollBy({top: 500})");
+            WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
+            manageCoursePage.clicarIconeDeExcluirAluno(trAluno);
+            manageCoursePage.clicarBotaoCancelarExclusaoDeAluno();
+
+            Thread.sleep(2000);
+            driver.navigate().refresh();
+            Thread.sleep(2000);
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Thread.sleep(1000);
+            js.executeScript("window.scrollBy({top: 500})");
+
+            WebElement trAlunoAposCancelamentoExclusao = manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
+
+            assertNotNull(trAlunoAposCancelamentoExclusao);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Clicar para Excluir aluno, e verificar se o prompt exibe o nome do aluno a ser excluído corretamente")
+    void CT18_2() {
+        try {
+            Thread.sleep(5000);
+            String nomeDoAluno = "Zildo Tester Java";
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            js.executeScript("window.scrollBy({top: 500})");
+            WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome(nomeDoAluno);
+            manageCoursePage.clicarIconeDeExcluirAluno(trAluno);
+
+            String textoExibido = manageCoursePage.localizarCaixaDeTextoConfirmarCancelarExclusao().findElement(By.tagName("p")).getText();
+
+            assertEquals("Tem certeza que deseja remover Zildo Tester Java do curso?", textoExibido);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test

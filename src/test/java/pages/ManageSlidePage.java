@@ -10,6 +10,9 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ManageSlidePage {
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -61,16 +64,32 @@ public class ManageSlidePage {
 
     // --- Descrição (textarea opcional)
     public void inserirDescricaoNoSlide(String descricao) {
-        String xpath = "//textarea";
-
-        WebElement inputDescricao = Objects.requireNonNull(wait.until(
-                ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath))
-        ));
-
-        // 1. Ação: Força o foco e clica via JS
-        js.executeScript("arguments[0].click();", inputDescricao);
+        WebElement inputDescricao =
+                wait.until(ExpectedConditions.presenceOfElementLocated(
+                        (By.xpath("//*[contains(text(), 'Slide para teste')]"))));
+        inputDescricao.click();
 
         // 2. Ação: Seleciona e sobrescreve
-        inputDescricao.sendKeys(Keys.chord(Keys.CONTROL, "a"), descricao);
+        inputDescricao.sendKeys(Keys.CONTROL + "a");
+        inputDescricao.sendKeys(Keys.DELETE);
+        inputDescricao.sendKeys(descricao);
+    }
+
+    public void clicarBotaoSalvarAlteracoes() {
+        WebElement botao = wait.until(ExpectedConditions.
+                elementToBeClickable(By.xpath("//button[contains(text(), 'Salvar Alterações')]")));
+        botao.click();
+    }
+
+    public void verificarSeSlideFoiAtualizado() {
+
+        assertDoesNotThrow(() -> { // Não deve lançar timeout exception
+            WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//div[contains(text(), 'Slide Atualizado')]")
+            ));
+            System.out.println(div.getText());
+            assertEquals("Slide Atualizado", div.getText());
+        });
+
     }
 }

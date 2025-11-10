@@ -44,14 +44,20 @@ public class SlidesCourseTest {
     @Test
     void CT09() {
         try {
-            Thread.sleep(10000);
+            Thread.sleep(5000);
             irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Grupo 01");
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Slides");
             manageSlidePage.clicarBotaoEditarSlideDoPrimeiroSlide();
             manageSlidePage.inserirTituloNoSlide("Furret");
+
             manageSlidePage.inserirLinkDoSlide("https://docs.google.com/presentation/d/e/2PACX-1vQj0RqOKJlzEPMf57kLonB8rfwuWv6JRMmIpqRkhpxRcFPJyI8oz6KWqpG7FKSS9LQViN2PsuSoWGnp/pub?start=false&loop=false&delayms=3000");
+
             manageSlidePage.inserirDescricaoNoSlide("Descrição Furret");
+
+            manageSlidePage.clicarBotaoSalvarAlteracoes();
+
+            manageSlidePage.verificarSeSlideFoiAtualizado();
             assertTrue(true);
         } catch (Exception e) {
             System.out.println(e.getMessage());

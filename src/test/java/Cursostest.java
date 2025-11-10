@@ -54,7 +54,7 @@ public class Cursostest {
     void CT34_acessarCursoComPin() throws InterruptedException {
         
         String nomeDoCursoComPin = "Grupo-01";
-        
+
 
         String pinCorreto = "grupo1";
 
