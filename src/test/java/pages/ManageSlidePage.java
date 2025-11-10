@@ -66,7 +66,7 @@ public class ManageSlidePage {
     public void inserirDescricaoNoSlide(String descricao) {
         WebElement inputDescricao =
                 wait.until(ExpectedConditions.presenceOfElementLocated(
-                        (By.xpath("//*[contains(text(), 'Trishula')]"))));
+                        (By.xpath("//*[contains(text(), 'Descrição Furret')]"))));
         inputDescricao.click();
 
         // 2. Ação: Seleciona e sobrescreve
