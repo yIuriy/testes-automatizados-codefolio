@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ManageCoursePage {
     private final WebDriver driver;
@@ -141,6 +142,26 @@ public class ManageCoursePage {
 
     public String obterNotaDoAluno(WebElement inputNota) {
         return inputNota.getAttribute("value");
+    }
+
+    public WebElement localizarLinhaDoAlunoSemNotaAtribuida() {
+        List<WebElement> inputLista = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//tbody[.//tr[.//td]]")
+        )).findElements(By.tagName("input"));
+
+        inputLista = inputLista.stream().filter(webElement ->
+                Objects.equals(webElement.getAttribute("value"), "")).toList();
+
+        WebElement primeiroTrAlunoSemNota = inputLista.getFirst();
+
+        return primeiroTrAlunoSemNota.findElement(By.xpath("./ancestor::tr"));
+    }
+
+    public String obterValorDoSvgDeConfirmacaoSeNotaFoiSalvaCorretamente(WebElement trAlunoSemNotaAtribuida){
+        WebElement tr = trAlunoSemNotaAtribuida.findElements(By.tagName("td")).get(2);
+        String svg = tr.findElements(By.tagName("svg")).getFirst().getAttribute("aria-label");
+        assertNotNull(svg);
+        return svg;
     }
 }
 

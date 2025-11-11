@@ -2,10 +2,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -14,6 +11,7 @@ import pages.ManageCoursePage;
 import utils.Authentication;
 import utils.Utilitarios;
 
+import java.security.Key;
 import java.time.Duration;
 import java.util.List;
 
@@ -69,6 +67,39 @@ public class AvaliacaoTest {
             System.out.println(e.getMessage());
         }
     }
+
+    // Passou
+    @Test
+    @DisplayName("Consulta de Avaliações de Aluno atribuindo nota ao aluno")
+    void CT19_1() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            manageCoursePage.irAteSecaoAvaliacoesCadastradas();
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("A1");
+            manageCoursePage.clicarBotaoDeAtribuirNota(trAvaliacao);
+
+            WebElement trAlunoSemNotaAtribuida = manageCoursePage.localizarLinhaDoAlunoSemNotaAtribuida();
+
+            WebElement inputDeNota = manageCoursePage.localizarInputDeNota(trAlunoSemNotaAtribuida);
+
+            inputDeNota.sendKeys("10");
+            inputDeNota.sendKeys(Keys.ENTER);
+
+            Thread.sleep(2000);
+            assertEquals("Nota salva com sucesso",
+                    manageCoursePage.obterValorDoSvgDeConfirmacaoSeNotaFoiSalvaCorretamente
+                            (trAlunoSemNotaAtribuida));
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     private void irAteAPaginaDeGerenciarCursos() {
         dashboardPage.abrirMenuDeOpcoesPerfil();
