@@ -11,6 +11,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ManageCoursePage {
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -40,7 +42,7 @@ public class ManageCoursePage {
 
     public void localizarEClicarNoMenuPorNome(String nomeDoMenu) {
         WebElement menuAlunos = wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(
-                "//*[contains(text(),'" + nomeDoMenu + "')]"))));
+                "//button[contains(text(),'" + nomeDoMenu + "')]"))));
         Utilitarios.centralizarElementoNaTela(menuAlunos, driver);
 
         assert menuAlunos != null;
@@ -106,6 +108,39 @@ public class ManageCoursePage {
     public void clicarBotaoCancelarExclusaoDeAluno() {
         WebElement div = localizarCaixaDeTextoConfirmarCancelarExclusao();
         div.findElements(By.cssSelector("button")).getFirst().click();
+    }
+
+    public void irAteSecaoAvaliacoesCadastradas() {
+        WebElement tituloSecao = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//h6[contains(text(), 'Avaliações Cadastradas')]")
+        ));
+        Utilitarios.centralizarElementoNaTela(tituloSecao, driver);
+    }
+
+    public WebElement localizarLinhaDaAvaliacaoPorNome(String nome) {
+        WebElement trAvaliacao = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//tr[.//td[contains(text(),'" + nome + "')]]")
+        ));
+        List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+        assertEquals(nome, elementosDentroDoTrAvaliacao.getFirst().getText());
+        return trAvaliacao;
+    }
+
+    public void clicarBotaoDeAtribuirNota(WebElement trAvaliacao) {
+        Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(
+                trAvaliacao.findElement(By.xpath(
+                        "//button[contains(text(), 'Atribuir Nota')]"
+                ))
+        ))).click();
+    }
+
+    public WebElement localizarInputDeNota(WebElement trAluno) {
+        return wait.until(ExpectedConditions.elementToBeClickable(trAluno.findElement(By.tagName("input"))
+        ));
+    }
+
+    public String obterNotaDoAluno(WebElement inputNota) {
+        return inputNota.getAttribute("value");
     }
 }
 
