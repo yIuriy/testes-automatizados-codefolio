@@ -67,7 +67,46 @@ public class AvaliacaoTest {
             System.out.println(e.getMessage());
         }
     }
-    
+
+    @Test
+    @DisplayName("Consulta de Avaliações de Alunos com aluno já tendo nota atribuída")
+    void CT19_1() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            manageCoursePage.irAteSecaoAvaliacoesCadastradas();
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("A1");
+            manageCoursePage.clicarBotaoDeAtribuirNota(trAvaliacao);
+
+            Thread.sleep(1000);
+            Utilitarios.scrollarTela(js, "-500");
+
+            WebElement trAluno1 = manageCoursePage.localizarLinhaDoAlunoPorNome("Iuri");
+            assertEquals("Iuri Da Silva Fernandes", trAluno1.findElement(By.tagName("p")).getText());
+
+            WebElement inputDeNota1 = manageCoursePage.localizarInputDeNota(trAluno1);
+            String notaDoAluno1 = manageCoursePage.obterNotaDoAluno(inputDeNota1);
+
+            assertEquals("10", notaDoAluno1);
+
+            WebElement trAluno2 = manageCoursePage.localizarLinhaDoAlunoPorNome("Zildo");
+            assertEquals("Zildo Tester Java", trAluno2.findElement(By.tagName("p")).getText());
+
+            WebElement inputDeNota2 = manageCoursePage.localizarInputDeNota(trAluno2);
+            String notaDoAluno2 = manageCoursePage.obterNotaDoAluno(inputDeNota2);
+
+            assertEquals("10", notaDoAluno2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
     private void irAteAPaginaDeGerenciarCursos() {
         dashboardPage.abrirMenuDeOpcoesPerfil();
         dashboardPage.abrirMenuGerenciamentoDeCursos();
