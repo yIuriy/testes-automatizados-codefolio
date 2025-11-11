@@ -128,11 +128,11 @@ public class AvaliacaoTest {
 
             inputDeNota.sendKeys(Keys.BACK_SPACE);
             inputDeNota.sendKeys(Keys.BACK_SPACE);
-            inputDeNota.sendKeys("5");
+            inputDeNota.sendKeys("9,7");
             inputDeNota.sendKeys(Keys.ENTER);
 
             notaDoAluno = manageCoursePage.obterNotaDoAluno(inputDeNota);
-            assertEquals("5", notaDoAluno);
+            assertEquals("9.7", notaDoAluno);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -162,6 +162,47 @@ public class AvaliacaoTest {
             inputDeNota.sendKeys(Keys.BACK_SPACE);
             inputDeNota.sendKeys("-5");
             assertEquals("-5", manageCoursePage.obterNotaDoAluno(inputDeNota));
+            inputDeNota.sendKeys(Keys.ENTER);
+
+            assertEquals("Nota inválida",
+                    manageCoursePage.obterValorDoSvgDeConfirmacaoSeNotaFoiSalvaCorretamente
+                            (trAluno));
+
+            driver.navigate().refresh();
+            Thread.sleep(5000);
+            trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome("Iuri");
+            inputDeNota = manageCoursePage.localizarInputDeNota(trAluno);
+            Utilitarios.centralizarElementoNaTela(trAluno, driver);
+
+            assertEquals("10", manageCoursePage.obterNotaDoAluno(inputDeNota));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Atribuindo maior que 10 ao aluno")
+    void CT19_4() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            manageCoursePage.irAteSecaoAvaliacoesCadastradas();
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("A1");
+            manageCoursePage.clicarBotaoDeAtribuirNota(trAvaliacao);
+
+            Utilitarios.scrollarTela(js, "-500");
+
+            WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome("Iuri");
+            WebElement inputDeNota = manageCoursePage.localizarInputDeNota(trAluno);
+
+            inputDeNota.sendKeys(Keys.BACK_SPACE);
+            inputDeNota.sendKeys(Keys.BACK_SPACE);
+            inputDeNota.sendKeys("11");
+            assertEquals("11", manageCoursePage.obterNotaDoAluno(inputDeNota));
             inputDeNota.sendKeys(Keys.ENTER);
 
             assertEquals("Nota inválida",
