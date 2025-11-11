@@ -101,6 +101,44 @@ public class AvaliacaoTest {
     }
 
 
+    @Test
+    @DisplayName("Alterando a nota de um aluno com nota já atribuída anteriormente")
+    void CT19_2() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            manageCoursePage.irAteSecaoAvaliacoesCadastradas();
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("A1");
+            manageCoursePage.clicarBotaoDeAtribuirNota(trAvaliacao);
+
+            Thread.sleep(1000);
+            Utilitarios.scrollarTela(js, "-500");
+
+            WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome("Iuri");
+            assertEquals("Iuri Da Silva Fernandes", trAluno.findElement(By.tagName("p")).getText());
+
+            WebElement inputDeNota = manageCoursePage.localizarInputDeNota(trAluno);
+            String notaDoAluno = manageCoursePage.obterNotaDoAluno(inputDeNota);
+
+            assertEquals("10", notaDoAluno);
+
+            inputDeNota.sendKeys(Keys.BACK_SPACE);
+            inputDeNota.sendKeys(Keys.BACK_SPACE);
+            inputDeNota.sendKeys("5");
+            inputDeNota.sendKeys(Keys.ENTER);
+
+            notaDoAluno = manageCoursePage.obterNotaDoAluno(inputDeNota);
+            assertEquals("5", notaDoAluno);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
     private void irAteAPaginaDeGerenciarCursos() {
         dashboardPage.abrirMenuDeOpcoesPerfil();
         dashboardPage.abrirMenuGerenciamentoDeCursos();
