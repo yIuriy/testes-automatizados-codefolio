@@ -130,7 +130,7 @@ public class ManageCoursePage {
     public void clicarBotaoDeAtribuirNota(WebElement trAvaliacao) {
         Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(
                 trAvaliacao.findElement(By.xpath(
-                        "//button[contains(text(), 'Atribuir Nota')]"
+                        ".//button[contains(text(), 'Atribuir Nota')]"
                 ))
         ))).click();
     }

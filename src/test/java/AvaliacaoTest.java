@@ -68,6 +68,7 @@ public class AvaliacaoTest {
         }
     }
 
+    // Passou
     @Test
     @DisplayName("Consulta de Avaliações de Alunos com aluno já tendo nota atribuída")
     void CT19_1() {
@@ -104,6 +105,36 @@ public class AvaliacaoTest {
             System.out.println(e.getMessage());
         }
     }
+
+    // Passou
+    @Test
+    @DisplayName("Consulta de Avaliação sem nenhuma nota atribuída")
+    void CT19_2() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            manageCoursePage.irAteSecaoAvaliacoesCadastradas();
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação sem Notas");
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+            manageCoursePage.clicarBotaoDeAtribuirNota(trAvaliacao);
+
+            WebElement tBodyContendoOsAlunos = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//tbody")
+            ));
+
+            for (WebElement trAluno : tBodyContendoOsAlunos.findElements(By.tagName("tr"))){
+                assertEquals("", manageCoursePage.obterNotaDoAluno(
+                        manageCoursePage.localizarInputDeNota(trAluno)));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
 
 
