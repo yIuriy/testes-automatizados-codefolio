@@ -35,6 +35,7 @@ public class FiltrarAlunoTest {
         js = (JavascriptExecutor) driver;
     }
 
+    // Passou
     @Test
     @DisplayName("Filtrar alunos Iniciantes")
     void CT20() {
@@ -54,6 +55,32 @@ public class FiltrarAlunoTest {
             for (WebElement e : trAlunos.findElements(By.tagName("tr"))) {
                 WebElement td = e.findElements(By.tagName("td")).get(1);
                 assertEquals("0%", td.getText());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Passou
+    @Test
+    @DisplayName("Filtrar alunos que concluíram o curso")
+    void CT20_1() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.filtrarAlunosPorProgresso("Concluído (100%)");
+
+            WebElement trAlunos = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//tbody")
+            ));
+
+            for (WebElement e : trAlunos.findElements(By.tagName("tr"))) {
+                WebElement td = e.findElements(By.tagName("td")).get(1);
+                assertEquals("100%", td.getText());
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
