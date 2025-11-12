@@ -216,5 +216,30 @@ public class FiltrarAlunoTest {
             System.out.println(e.getMessage());
         }
     }
+
+    @Test
+    @DisplayName("Verificar se a ordenação de Z-A funciona")
+    void CT20_7() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.clicarEmOrdenarDeZA();
+
+            WebElement tbody = manageCoursePage.obterTableBodyDosAlunosExibidos();
+
+            String nomePrimeiroAluno = tbody.findElements(By.tagName("tr")).getFirst().findElement(By.tagName("th")).getText();
+            String nomeUltimoAluno =
+                    tbody.findElements(By.tagName("tr")).getLast().findElement(By.tagName("th")).getText();
+
+            assertEquals("Zildo Tester Java", nomePrimeiroAluno);
+            assertEquals("Amanda Dias De Souza", nomeUltimoAluno);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
 
