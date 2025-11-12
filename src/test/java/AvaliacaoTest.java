@@ -135,6 +135,7 @@ public class AvaliacaoTest {
         }
     }
 
+    // Passou
     @Test
     @DisplayName("Informações e opções da Avaliação são exibidas corretamente")
     void CT19_3() {
@@ -157,6 +158,28 @@ public class AvaliacaoTest {
             // Realiza os assertEquals, garantindo que todas as opções existem
             verificarSeExisteMenuDeOpcoesDaAvaliacao(elementosDentroDoTrAvaliacao);
 
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Passou
+    @Test
+    @DisplayName("Soma dos percentuais das avaliações cadastradas é exibido corretamente")
+    void CT19_4() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            manageCoursePage.irAteSecaoAvaliacoesCadastradas();
+
+            int percentualTotal = manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas();
+
+            String textoPercentualTotal = manageCoursePage.obterTextoDoTotalDaNotaFinal();
+
+            assertEquals("Total: " + percentualTotal + "% da nota final", textoPercentualTotal);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

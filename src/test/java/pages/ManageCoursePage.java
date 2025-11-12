@@ -56,14 +56,14 @@ public class ManageCoursePage {
 
     public void inserirTextoNoFiltrar(String texto) {
         WebElement inputFiltrar = getInputFiltrar();
-        Assertions.assertNotNull(inputFiltrar);
+        assertNotNull(inputFiltrar);
         Utilitarios.centralizarElementoNaTela(inputFiltrar, driver);
         inputFiltrar.sendKeys(texto);
     }
 
     public void limparTextoNoFiltrar() {
         WebElement inputFiltrar = getInputFiltrar();
-        Assertions.assertNotNull(inputFiltrar);
+        assertNotNull(inputFiltrar);
         Utilitarios.centralizarElementoNaTela(inputFiltrar, driver);
         inputFiltrar.sendKeys(Keys.CONTROL + "a");
         inputFiltrar.sendKeys(Keys.DELETE);
@@ -162,6 +162,29 @@ public class ManageCoursePage {
         String svg = tr.findElements(By.tagName("svg")).getFirst().getAttribute("aria-label");
         assertNotNull(svg);
         return svg;
+    }
+
+    public int obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas() {
+        WebElement tbody = wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.tagName("tbody")
+                )
+        );
+        int somaTotal = 0;
+        for (WebElement e : tbody.findElements(By.tagName("tr"))) {
+            List<WebElement> elements = e.findElements(By.xpath("td"));
+            int percentual = Integer.parseInt(elements.get(1).getText().replace("%", ""));
+            somaTotal += percentual;
+        }
+        return somaTotal;
+    }
+
+    public String obterTextoDoTotalDaNotaFinal() {
+        return wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//h6[contains(text(),'Total:')]")
+                )
+        ).getText();
     }
 }
 
