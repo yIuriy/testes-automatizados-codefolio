@@ -1,7 +1,6 @@
 package pages;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -67,6 +66,29 @@ public class ManageCoursePage {
         Utilitarios.centralizarElementoNaTela(inputFiltrar, driver);
         inputFiltrar.sendKeys(Keys.CONTROL + "a");
         inputFiltrar.sendKeys(Keys.DELETE);
+    }
+
+    public void filtrarAlunosPorProgresso(String opcao) {
+        clicarInputFiltroPorId("progress-filter");
+        Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//li[contains(text(), '" + opcao + "')]")
+        ))).click();
+    }
+
+    public void filtrarAlunosPorRole(String role) {
+        clicarInputFiltroPorId("role-filter");
+        Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//li[contains(text(), '" + role + "')]")
+        ))).click();
+    }
+
+    private void clicarInputFiltroPorId(String id) {
+        WebElement until = wait.until(ExpectedConditions.presenceOfElementLocated(
+                        By.id(id)
+                )
+        );
+        WebElement webElement = until.findElement(By.xpath(".."));
+        webElement.click();
     }
 
     public WebElement localizarLinhaDoAlunoPorNome(String nome) {
