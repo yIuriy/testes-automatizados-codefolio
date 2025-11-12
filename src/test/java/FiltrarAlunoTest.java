@@ -328,5 +328,32 @@ public class FiltrarAlunoTest {
         }
     }
 
+    @Test
+    @DisplayName("Filtrando aluno por email")
+    void CT20_11() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.inserirTextoNoFiltrar("zildotesterjava@gmail.com");
+
+            List<WebElement> trAlunos = manageCoursePage.obterTableBodyDosAlunosExibidos().
+                    findElements(By.tagName("tr"));
+
+            assertEquals(1, trAlunos.size());
+
+            assertEquals("Zildo Tester Java",
+                    trAlunos.getFirst().findElement(By.tagName("th")).getText());
+
+            assertEquals("zildotesterjava@gmail.com",
+                    trAlunos.getFirst().findElement(By.tagName("td")).getText());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
 
