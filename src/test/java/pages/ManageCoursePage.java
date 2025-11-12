@@ -229,5 +229,13 @@ public class ManageCoursePage {
         ));
         return trAlunos;
     }
+
+    public void clicarRemoverFiltroAtivo() {
+        WebElement divContainerFiltroAtivo = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//div[@aria-label='Limpar todos os filtros']")
+        ));
+
+        divContainerFiltroAtivo.findElement(By.tagName("svg")).click();
+    }
 }
 

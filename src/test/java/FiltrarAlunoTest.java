@@ -383,5 +383,38 @@ public class FiltrarAlunoTest {
             System.out.println(e.getMessage());
         }
     }
+
+    // Passou
+    @Test
+    @DisplayName("Verificar remoção do filtro ativo")
+    void CT20_13() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.filtrarAlunosPorProgresso("Concluído (100%)");
+
+            WebElement trAlunos = manageCoursePage.obterTableBodyDosAlunosExibidos();
+
+            for (WebElement e : trAlunos.findElements(By.tagName("tr"))) {
+                WebElement td = e.findElements(By.tagName("td")).get(1);
+                assertEquals("100%", td.getText());
+            }
+
+            WebElement p = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains" +
+                    "(normalize-space(), 'Exibindo')]")));
+
+            assertEquals("Exibindo 6 de 26 estudantes", p.getText());
+
+            manageCoursePage.clicarRemoverFiltroAtivo();
+
+            assertEquals("Exibindo 26 de 26 estudantes", p.getText());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
 
