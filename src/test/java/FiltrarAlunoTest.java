@@ -86,5 +86,33 @@ public class FiltrarAlunoTest {
             System.out.println(e.getMessage());
         }
     }
+
+    // Passou
+    @Test
+    @DisplayName("Filtrar alunos por progresso utilizando uma opção que não retornará alunos")
+    void CT20_2() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.filtrarAlunosPorProgresso("Avançado");
+
+            WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//p[contains(text(), 'Nenhum')]")
+            )).findElement(By.xpath(".."));
+
+            assertEquals("Nenhum estudante corresponde aos filtros aplicados.",
+                    div.findElement(By.tagName("p")).getText());
+
+            assertEquals("LIMPAR FILTROS",
+                    div.findElement(By.tagName("button")).getText());
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
 
