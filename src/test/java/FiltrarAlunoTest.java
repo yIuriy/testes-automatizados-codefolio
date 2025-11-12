@@ -48,9 +48,7 @@ public class FiltrarAlunoTest {
 
             manageCoursePage.filtrarAlunosPorProgresso("Iniciante (0-24%)");
 
-            WebElement trAlunos = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//tbody")
-            ));
+            WebElement trAlunos = manageCoursePage.obterTableBodyDosAlunosExibidos();
 
             for (WebElement e : trAlunos.findElements(By.tagName("tr"))) {
                 WebElement td = e.findElements(By.tagName("td")).get(1);
@@ -74,9 +72,7 @@ public class FiltrarAlunoTest {
 
             manageCoursePage.filtrarAlunosPorProgresso("Concluído (100%)");
 
-            WebElement trAlunos = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//tbody")
-            ));
+            WebElement trAlunos = manageCoursePage.obterTableBodyDosAlunosExibidos();
 
             for (WebElement e : trAlunos.findElements(By.tagName("tr"))) {
                 WebElement td = e.findElements(By.tagName("td")).get(1);
@@ -86,6 +82,7 @@ public class FiltrarAlunoTest {
             System.out.println(e.getMessage());
         }
     }
+
 
     // Passou
     @Test
@@ -128,9 +125,7 @@ public class FiltrarAlunoTest {
 
             manageCoursePage.filtrarAlunosPorRole("Estudante");
 
-            WebElement trAlunos = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//tbody")
-            ));
+            WebElement trAlunos = manageCoursePage.obterTableBodyDosAlunosExibidos();
 
             for (WebElement e : trAlunos.findElements(By.tagName("tr"))) {
                 WebElement td = e.findElements(By.tagName("td")).get(3);
@@ -156,9 +151,7 @@ public class FiltrarAlunoTest {
 
 
             assertDoesNotThrow(() -> {
-                WebElement trAlunos = wait.until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//tbody")
-                ));
+                WebElement trAlunos = manageCoursePage.obterTableBodyDosAlunosExibidos();
 
                 for (WebElement e : trAlunos.findElements(By.tagName("tr"))) {
                     WebElement td = e.findElements(By.tagName("td")).get(3);
@@ -193,6 +186,32 @@ public class FiltrarAlunoTest {
             assertEquals("LIMPAR FILTROS",
                     div.findElement(By.tagName("button")).getText());
 
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Passou
+    @Test
+    @DisplayName("Verificar se a ordenação de A-Z funciona")
+    void CT20_6() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.clicarEmOrdenarDeAZ();
+
+            WebElement tbody = manageCoursePage.obterTableBodyDosAlunosExibidos();
+
+            String nomePrimeiroAluno = tbody.findElements(By.tagName("tr")).getFirst().findElement(By.tagName("th")).getText();
+            String nomeUltimoAluno =
+                    tbody.findElements(By.tagName("tr")).getLast().findElement(By.tagName("th")).getText();
+
+            assertEquals("Amanda Dias De Souza", nomePrimeiroAluno);
+            assertEquals("Zildo Tester Java", nomeUltimoAluno);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

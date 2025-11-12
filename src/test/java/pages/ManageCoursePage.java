@@ -82,6 +82,20 @@ public class ManageCoursePage {
         ))).click();
     }
 
+    public void clicarEmOrdenarDeAZ() {
+        clicarInputFiltroPorId("sort-select");
+        Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//li[contains(text(), 'Nome (A-Z)')]")
+        ))).click();
+    }
+
+    public void clicarEmOrdenarDeZA() {
+        clicarInputFiltroPorId("sort-select");
+        Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//li[contains(text(), 'Nome (Z-A)')]")
+        ))).click();
+    }
+
     private void clicarInputFiltroPorId(String id) {
         WebElement until = wait.until(ExpectedConditions.presenceOfElementLocated(
                         By.id(id)
@@ -207,6 +221,13 @@ public class ManageCoursePage {
                         By.xpath("//h6[contains(text(),'Total:')]")
                 )
         ).getText();
+    }
+
+    public WebElement obterTableBodyDosAlunosExibidos() {
+        WebElement trAlunos = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//tbody")
+        ));
+        return trAlunos;
     }
 }
 
