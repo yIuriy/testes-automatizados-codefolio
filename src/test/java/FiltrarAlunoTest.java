@@ -140,5 +140,35 @@ public class FiltrarAlunoTest {
             System.out.println(e.getMessage());
         }
     }
+
+    // Falhou
+    @Test
+    @DisplayName("Filtrar alunos por role de Admin")
+    void CT20_4() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.filtrarAlunosPorRole("Admin");
+
+
+            assertDoesNotThrow(() -> {
+                WebElement trAlunos = wait.until(ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//tbody")
+                ));
+
+                for (WebElement e : trAlunos.findElements(By.tagName("tr"))) {
+                    WebElement td = e.findElements(By.tagName("td")).get(3);
+                    assertEquals("Admin", td.getText());
+                }
+            });
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
 
