@@ -272,6 +272,7 @@ public class FiltrarAlunoTest {
         }
     }
 
+    // Passou
     @Test
     @DisplayName("Filtrando aluno por nome em comum entre dois alunos diferentes")
     void CT20_9() {
@@ -294,6 +295,34 @@ public class FiltrarAlunoTest {
 
             assertEquals("Gabriel Dutra Martinez",
                     trAlunos.getLast().findElement(By.tagName("th")).getText());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Passou
+    @Test
+    @DisplayName("Filtrando aluno com nome inexistente")
+    void CT20_10() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.inserirTextoNoFiltrar("Homem-Aranha");
+
+            WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//p[contains(text(), 'Nenhum')]")
+            )).findElement(By.xpath(".."));
+
+            assertEquals("Nenhum estudante corresponde aos filtros aplicados.",
+                    div.findElement(By.tagName("p")).getText());
+
+            assertEquals("LIMPAR FILTROS",
+                    div.findElement(By.tagName("button")).getText());
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
