@@ -185,6 +185,36 @@ public class AvaliacaoTest {
         }
     }
 
+    // Passou
+    @Test
+    @DisplayName("Verificar comportamento do sistema em um curso sem nenhuma avaliação cadastrada")
+    void CT19_5() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso sem Avaliações");
+
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            manageCoursePage.irAteSecaoAvaliacoesCadastradas();
+
+            WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+                            By.xpath("//h6[contains(text(), 'Avaliações Cadastradas')]")))
+                    .findElement(By.xpath(".."));
+
+            assertTrue(
+                    div.findElements(By.tagName("div")).stream().anyMatch(
+                            element -> element.getText().equalsIgnoreCase("Nenhuma avaliação cadastrada. Adicione sua primeira " +
+                                    "avaliação usando o formulário acima.")
+                    )
+            );
+
+            String textoPercentualTotal = manageCoursePage.obterTextoDoTotalDaNotaFinal();
+            assertEquals("Total: 0% da nota final", textoPercentualTotal);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 
     private void irAteAPaginaDeGerenciarCursos() {
         dashboardPage.abrirMenuDeOpcoesPerfil();
