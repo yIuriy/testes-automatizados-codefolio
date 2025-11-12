@@ -157,7 +157,7 @@ public class ManageCoursePage {
         return primeiroTrAlunoSemNota.findElement(By.xpath("./ancestor::tr"));
     }
 
-    public String obterValorDoSvgDeConfirmacaoSeNotaFoiSalvaCorretamente(WebElement trAlunoSemNotaAtribuida){
+    public String obterValorDoSvgDeConfirmacaoSeNotaFoiSalvaCorretamente(WebElement trAlunoSemNotaAtribuida) {
         WebElement tr = trAlunoSemNotaAtribuida.findElements(By.tagName("td")).get(2);
         String svg = tr.findElements(By.tagName("svg")).getFirst().getAttribute("aria-label");
         assertNotNull(svg);

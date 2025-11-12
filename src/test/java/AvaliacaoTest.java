@@ -126,7 +126,7 @@ public class AvaliacaoTest {
                     By.xpath("//tbody")
             ));
 
-            for (WebElement trAluno : tBodyContendoOsAlunos.findElements(By.tagName("tr"))){
+            for (WebElement trAluno : tBodyContendoOsAlunos.findElements(By.tagName("tr"))) {
                 assertEquals("", manageCoursePage.obterNotaDoAluno(
                         manageCoursePage.localizarInputDeNota(trAluno)));
             }
@@ -135,13 +135,49 @@ public class AvaliacaoTest {
         }
     }
 
+    @Test
+    @DisplayName("Informações e opções da Avaliação são exibidas corretamente")
+    void CT19_3() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
 
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            manageCoursePage.irAteSecaoAvaliacoesCadastradas();
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("A1");
+
+            List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+
+            assertEquals("A1", elementosDentroDoTrAvaliacao.getFirst().getText());
+
+            assertEquals("50%", elementosDentroDoTrAvaliacao.get(1).getText());
+
+            // Realiza os assertEquals, garantindo que todas as opções existem
+            verificarSeExisteMenuDeOpcoesDaAvaliacao(elementosDentroDoTrAvaliacao);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 
     private void irAteAPaginaDeGerenciarCursos() {
         dashboardPage.abrirMenuDeOpcoesPerfil();
         dashboardPage.abrirMenuGerenciamentoDeCursos();
         wait.until(ExpectedConditions.urlContains("/manage-courses"));
+    }
+
+    private void verificarSeExisteMenuDeOpcoesDaAvaliacao(List<WebElement> elementos) {
+        List<WebElement> opcoes = elementos.getLast().findElements(By.tagName("button"));
+        WebElement editButton = opcoes.getFirst().findElement(By.tagName("svg"));
+        assertEquals("EditIcon", editButton.getAttribute("data-testid"));
+
+        WebElement deleteButton = opcoes.get(1).findElement(By.tagName("svg"));
+        assertEquals("DeleteIcon", deleteButton.getAttribute("data-testid"));
+
+        assertEquals("ATRIBUIR NOTA", opcoes.getLast().getText());
     }
 
 }
