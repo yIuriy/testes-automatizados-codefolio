@@ -37,13 +37,17 @@ public class ManageCourseTest {
         js = (JavascriptExecutor) driver;
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong>
+     *
+     */
     @Test
     void CT17() {
         try {
             Thread.sleep(5000);
             irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             manageCoursePage.inserirTextoNoFiltrar("Iuri");
 
@@ -66,13 +70,17 @@ public class ManageCourseTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong>
+     *
+     */
     @Test
     void CT17_1() {
         try {
             Thread.sleep(5000);
             irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             manageCoursePage.inserirTextoNoFiltrar("Iuri");
             WebElement trAluno = manageCoursePage.localizarLinhaDoAlunoPorNome("Iuri");
@@ -112,7 +120,11 @@ public class ManageCourseTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong>
+     *
+     */
     @Test
     void VT17_2() {
         try {
@@ -137,7 +149,11 @@ public class ManageCourseTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong>
+     *
+     */
     @Test
     void CT17_3() {
         try {
@@ -180,6 +196,11 @@ public class ManageCourseTest {
         wait.until(ExpectedConditions.urlContains("/manage-courses"));
     }
 
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Falhou</strong>
+     *
+     */
     @Test
     @DisplayName("Clicar para Excluir aluno e clicar em Confirmar")
     void CT18() {
@@ -211,6 +232,11 @@ public class ManageCourseTest {
         }
     }
 
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong>
+     *
+     */
     @Test
     @DisplayName("Clicar para Excluir aluno, mas não clicar em confirmar")
     void CT18_1() {
@@ -240,6 +266,11 @@ public class ManageCourseTest {
         }
     }
 
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong>
+     *
+     */
     @Test
     @DisplayName("Clicar para Excluir aluno, e verificar se o prompt exibe o nome do aluno a ser excluído corretamente")
     void CT18_2() {

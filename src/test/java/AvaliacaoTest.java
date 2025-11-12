@@ -2,7 +2,10 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -11,11 +14,11 @@ import pages.ManageCoursePage;
 import utils.Authentication;
 import utils.Utilitarios;
 
-import java.security.Key;
 import java.time.Duration;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AvaliacaoTest {
     WebDriver driver;
@@ -37,7 +40,12 @@ public class AvaliacaoTest {
         js = (JavascriptExecutor) driver;
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 11/11/2025
+     *
+     */
     @Test
     @DisplayName("Consulta de Avaliações de Alunos com aluno já tendo nota atribuída")
     void CT19() {
@@ -68,7 +76,12 @@ public class AvaliacaoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 11/11/2025
+     *
+     */
     @Test
     @DisplayName("Consulta de Avaliações de Alunos com aluno já tendo nota atribuída")
     void CT19_1() {
@@ -106,7 +119,12 @@ public class AvaliacaoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 11/11/2025
+     *
+     */
     @Test
     @DisplayName("Consulta de Avaliação sem nenhuma nota atribuída")
     void CT19_2() {
@@ -135,7 +153,12 @@ public class AvaliacaoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Informações e opções da Avaliação são exibidas corretamente")
     void CT19_3() {
@@ -163,7 +186,12 @@ public class AvaliacaoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Soma dos percentuais das avaliações cadastradas é exibido corretamente")
     void CT19_4() {
@@ -185,7 +213,12 @@ public class AvaliacaoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Verificar comportamento do sistema em um curso sem nenhuma avaliação cadastrada")
     void CT19_5() {

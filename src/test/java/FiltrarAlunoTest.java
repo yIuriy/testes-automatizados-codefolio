@@ -36,14 +36,19 @@ public class FiltrarAlunoTest {
         js = (JavascriptExecutor) driver;
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrar alunos Iniciantes")
     void CT20() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -60,14 +65,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrar alunos que concluíram o curso")
     void CT20_1() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -85,14 +95,19 @@ public class FiltrarAlunoTest {
     }
 
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrar alunos por progresso utilizando uma opção que não retornará alunos")
     void CT20_2() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -113,14 +128,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Falhou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Falhou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrar alunos por role de Estudante")
     void CT20_3() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -137,14 +157,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Falhou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Falhou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrar alunos por role de Admin")
     void CT20_4() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -165,13 +190,19 @@ public class FiltrarAlunoTest {
         }
     }
 
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrar alunos por role utilizando uma opção que não retornará alunos")
     void CT20_5() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -192,14 +223,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Verificar se a ordenação de A-Z funciona")
     void CT20_6() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -218,14 +254,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Verificar se a ordenação de Z-A funciona")
     void CT20_7() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -244,14 +285,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrando aluno por nome único")
     void CT20_8() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -272,14 +318,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrando aluno por nome em comum entre dois alunos diferentes")
     void CT20_9() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -300,14 +351,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrando aluno com nome inexistente")
     void CT20_10() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -328,14 +384,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrando aluno por email")
     void CT20_11() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -356,14 +417,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Filtrando aluno com email inexistente")
     void CT20_12() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -384,14 +450,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Verificar remoção do filtro ativo")
     void CT20_13() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
@@ -417,14 +488,19 @@ public class FiltrarAlunoTest {
         }
     }
 
-    // Passou
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 12/11/2025
+     *
+     */
     @Test
     @DisplayName("Verificar se remoção do filtro ativo remove todos os filtros ativos")
     void CT20_14() {
         try {
             Thread.sleep(5000);
             dashboardPage.irAteAPaginaDeGerenciarCursos();
-            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             Utilitarios.scrollarTela(js, "500");
 
