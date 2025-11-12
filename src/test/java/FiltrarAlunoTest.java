@@ -328,6 +328,7 @@ public class FiltrarAlunoTest {
         }
     }
 
+    // Passou
     @Test
     @DisplayName("Filtrando aluno por email")
     void CT20_11() {
@@ -355,5 +356,32 @@ public class FiltrarAlunoTest {
         }
     }
 
+    // Passou
+    @Test
+    @DisplayName("Filtrando aluno com email inexistente")
+    void CT20_12() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.inserirTextoNoFiltrar("naoexiste@gmail.com");
+
+            WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//p[contains(text(), 'Nenhum')]")
+            )).findElement(By.xpath(".."));
+
+            assertEquals("Nenhum estudante corresponde aos filtros aplicados.",
+                    div.findElement(By.tagName("p")).getText());
+
+            assertEquals("LIMPAR FILTROS",
+                    div.findElement(By.tagName("button")).getText());
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
 
