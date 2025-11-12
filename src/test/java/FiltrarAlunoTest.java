@@ -12,6 +12,7 @@ import utils.Authentication;
 import utils.Utilitarios;
 
 import java.time.Duration;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -217,6 +218,7 @@ public class FiltrarAlunoTest {
         }
     }
 
+    // Passou
     @Test
     @DisplayName("Verificar se a ordenação de Z-A funciona")
     void CT20_7() {
@@ -241,5 +243,34 @@ public class FiltrarAlunoTest {
             System.out.println(e.getMessage());
         }
     }
+
+    @Test
+    @DisplayName("Filtrando aluno por nome único")
+    void CT20_8() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.inserirTextoNoFiltrar("Zildo");
+
+            List<WebElement> trAlunos = manageCoursePage.obterTableBodyDosAlunosExibidos().
+                    findElements(By.tagName("tr"));
+
+            assertEquals(1, trAlunos.size());
+
+            assertEquals("Zildo Tester Java",
+                    trAlunos.getFirst().findElement(By.tagName("th")).getText());
+
+            assertEquals("zildotesterjava@gmail.com",
+                    trAlunos.getFirst().findElement(By.tagName("td")).getText());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
 }
 
