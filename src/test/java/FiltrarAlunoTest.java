@@ -244,6 +244,7 @@ public class FiltrarAlunoTest {
         }
     }
 
+    // Passou
     @Test
     @DisplayName("Filtrando aluno por nome único")
     void CT20_8() {
@@ -271,6 +272,32 @@ public class FiltrarAlunoTest {
         }
     }
 
+    @Test
+    @DisplayName("Filtrando aluno por nome em comum entre dois alunos diferentes")
+    void CT20_9() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
+            manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
+            Utilitarios.scrollarTela(js, "500");
+
+            manageCoursePage.inserirTextoNoFiltrar("Gabriel");
+
+            List<WebElement> trAlunos = manageCoursePage.obterTableBodyDosAlunosExibidos().
+                    findElements(By.tagName("tr"));
+
+            assertEquals(2, trAlunos.size());
+
+            assertEquals("Gabriel Camargo Ortiz",
+                    trAlunos.getFirst().findElement(By.tagName("th")).getText());
+
+            assertEquals("Gabriel Dutra Martinez",
+                    trAlunos.getLast().findElement(By.tagName("th")).getText());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 }
 
