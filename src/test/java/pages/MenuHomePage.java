@@ -52,6 +52,49 @@ public class MenuHomePage {
         return Integer.parseInt(partes[0]);
 
     }
+    public void clicarEmComentarios(String tituloVideo){
+        WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//div[.//div[contains(normalize-space(), '" + tituloVideo + "')]]")));
+
+        div.findElement(By.xpath(".//span[normalize-space(text())='Comentários']/ancestor::div[1]")).click();
+    }
+    
+    public void comentar(String tituloVideo, String texto){
+        WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//div[.//div[contains(normalize-space(), '" + tituloVideo + "')]]")));
+    
+        WebElement input = div.findElement(By.xpath(".//input[contains(normalize-space(@placeholder), 'comentário')]"));
+
+        input.click();
+        input.clear();
+        input.sendKeys(texto);
+
+        div.findElement(By.xpath(
+            ".//button[.//*[@data-testid='SendIcon']]"
+        )).click();
+
+        
+    }
+
+    public String visualizarComentario(String tituloVideo, String texto){
+        WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//div[.//div[contains(normalize-space(), '" + tituloVideo + "')]]")));
+
+        div.findElement(By.xpath(
+            ".//button[.//*[contains(., 'Ver')]]"
+        )).click();
+
+        WebElement comentario;
+        try{
+        comentario = div.findElement(By.xpath(
+            ".//span[contains(., '"+texto+"')]"
+        ));
+        }catch(Exception e){
+            return null;
+        }
+
+        return comentario.getText();        
+    }
 
     public void clicarEmCompartilhar(String tituloVideo){
         WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -70,5 +113,6 @@ public class MenuHomePage {
         return null;
     }
 }
+
 
 } 

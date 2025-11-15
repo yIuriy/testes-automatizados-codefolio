@@ -105,6 +105,38 @@ public class MenuHomeTest {
         }
     }
 
+    // Reprovou
+    @Test
+    void CT41() {
+        
+        //   Objetivo: Verificar se o sistema permite a adição de um comentário ao vídeo.
+
+        try {
+            Thread.sleep(4000);
+            irAteAHome();
+
+            String texto = "Comentário de Teste grupo1";
+            String titulo = "Selenium (Testes Automatizados)";
+
+            menuHomePage.clicarEmComentarios(titulo);
+            Thread.sleep(2000);
+
+            menuHomePage.comentar(titulo, texto);
+            Thread.sleep(1500);
+
+            String retorno = menuHomePage.visualizarComentario(titulo, texto);
+
+            assertNotNull(retorno);
+
+            if (!retorno.isEmpty()){
+            assertEquals(texto, retorno);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     // Passou
     @Test
     void CT42(){
