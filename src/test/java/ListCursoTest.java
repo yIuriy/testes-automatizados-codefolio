@@ -79,8 +79,28 @@ public class ListCursoTest {
         String srcVideoInicial = listCursoPage.pegarSrcVideo();
         Thread.sleep(3000);
         listCursoPage.avancarVideo()
-                     .videoCarregou();   
+                     .videoCarregou();
         String srcProximoVideo = listCursoPage.pegarSrcVideo();
         assertNotEquals(srcVideoInicial, srcProximoVideo, "O vídeo não mudou após avançar/voltar.");
     }
+
+    @Test
+    @DisplayName("Clicar para ir para o próximo vídeo e depois voltar para o inicial")
+    void CT50_1() throws InterruptedException {
+                Thread.sleep(5000);
+        listCursoPage.abrirPaginaCursos()
+                .abaEmAndamento()
+                .abrirCurso("Teste em Andamento")
+                .clicarVerVideoPorTitulo("video1")
+                .videoCarregou();
+        String srcVideoInicial = listCursoPage.pegarSrcVideo();
+        Thread.sleep(3000);
+        listCursoPage.avancarVideo()
+                     .videoCarregou();
+        listCursoPage.voltarVideo()
+                     .videoCarregou();
+        String srcVoltando = listCursoPage.pegarSrcVideo();
+        assertEquals(srcVideoInicial, srcVoltando, "Algum dos botões não funcionou");
+    }
+
 }
