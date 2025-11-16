@@ -8,19 +8,33 @@ import java.util.List;
 public class ListCursoPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
+    private final JavascriptExecutor js;
 
     public ListCursoPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        js = (JavascriptExecutor) driver;
     }
 
-    /** Abre a lista de todos os cursos */
     public ListCursoPage abrirPaginaCursos() {
         driver.get("https://testes.codefolio.com.br/listcurso");
         return this;
     }
 
-    /** Abre um curso pelo nome (exato ou que contenha o nome) */
+public ListCursoPage abaEmAndamento() {
+    By botaoEmAndamento = By.xpath("//button[contains(@class,'MuiTab-root') and normalize-space(text())='Em Andamento']");
+    WebElement botao = wait.until(ExpectedConditions.elementToBeClickable(botaoEmAndamento));
+    js.executeScript("arguments[0].scrollIntoView({block:'center'});", botao);
+    botao.click();
+    return this;
+}
+
+    public ListCursoPage abaConcluido() {
+        WebElement botao = driver.findElement(By.xpath("//*[@id=\"root\"]/div/div[3]/div[1]/div/div/button[3]"));
+        botao.click();
+        return this;
+    }
+
     public ListCursoPage abrirCurso(String nomeCurso) {
         WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(12));
 
@@ -36,7 +50,6 @@ public class ListCursoPage {
             titulo = w.until(ExpectedConditions.visibilityOfElementLocated(tituloContains));
         }
 
-        // Sobe pro card do curso
         By cardContainer = By.xpath(
                 ".//ancestor::*[contains(@class,'MuiPaper-root') or contains(@class,'MuiCard-root') or contains(@class,'MuiGrid-item')][1]"
         );
@@ -45,9 +58,23 @@ public class ListCursoPage {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", card);
 
         // Clica no botão para entrar
-        By botaoNoCard = By.xpath(".//button[contains(normalize-space(.),'Começar') or contains(normalize-space(.),'Acessar') or contains(normalize-space(.),'Ver Vídeo')]");
+        By botaoNoCard = By.xpath(".//button[contains(normalize-space(.),'Começar') or contains(normalize-space(.),'Continuar') or contains(normalize-space(.),'Ver Curso')]");
         WebElement botao = w.until(ExpectedConditions.elementToBeClickable(card.findElement(botaoNoCard)));
         botao.click();
+
+        return this;
+    }
+
+
+    public ListCursoPage clicarVerVideoPorTitulo(String tituloDoVideo) {
+        WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(12));
+
+        // clicar no botão "Ver Vídeo" que aparece na tela
+        By botaoVerVideo = By.xpath("//button[contains(normalize-space(.),'Ver Vídeo')]");
+        WebElement btn = w.until(ExpectedConditions.elementToBeClickable(botaoVerVideo));
+
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", btn);
+        btn.click();
 
         return this;
     }
@@ -65,23 +92,21 @@ public class ListCursoPage {
         }
     }
 
-    /** Dentro do curso, clica em "Ver Vídeo" */
-    public ListCursoPage clicarVerVideoPorTitulo(String tituloDoVideo) {
-        WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(12));
-
-        // Versão simples e robusta: clicar no botão "Ver Vídeo" que aparece na tela
-        By botaoVerVideo = By.xpath("//button[contains(normalize-space(.),'Ver Vídeo')]");
-        WebElement btn = w.until(ExpectedConditions.elementToBeClickable(botaoVerVideo));
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", btn);
-        btn.click();
-
-        return this;
-    }
-
-    /** Confirma que o vídeo realmente carregou */
     public boolean videoCarregou() {
         By iframePlayer = By.cssSelector("iframe[src*='youtube'], iframe[src*='player'], iframe[src*='embed']");
         return wait.until(ExpectedConditions.visibilityOfElementLocated(iframePlayer)).isDisplayed();
+    }
+
+
+    public ListCursoPage avancarVideo() {
+        WebElement botao = driver.findElement(By.id("//button[contains(data-testid(.),'ArrowForwardIcon')]"));
+        botao.click();
+        return this;
+    }
+
+    public ListCursoPage voltarVideo() {
+        WebElement botao = driver.findElement(By.id("//button[contains(data-testid(.),'ArrowBackIcon')]"));
+        botao.click();
+        return this;
     }
 }
