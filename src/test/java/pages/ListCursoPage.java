@@ -102,23 +102,40 @@ public ListCursoPage abaEmAndamento() {
     }
 
     public ListCursoPage avancarVideo() {
-    By botaoAvancarBy = By.xpath("//button[.//svg[@data-testid='ArrowForwardIcon']]");
-    WebElement botaoAvancar = wait.until(ExpectedConditions.presenceOfElementLocated(botaoAvancarBy));
-    js.executeScript("arguments[0].click();", botaoAvancar);
-    return this;
+        By botaoAvancarBy = By.xpath("//button[.//svg[@data-testid='ArrowForwardIcon']]");
+        WebElement botaoAvancar = wait.until(ExpectedConditions.presenceOfElementLocated(botaoAvancarBy));
+        js.executeScript("arguments[0].click();", botaoAvancar);
+        return this;
     }
 
     public ListCursoPage voltarVideo() {
-    By botaoVoltarBy = By.xpath("//button[.//svg[@data-testid='ArrowBackIcon']]");
-    WebElement botaoVoltar = wait.until(ExpectedConditions.presenceOfElementLocated(botaoVoltarBy));
-    js.executeScript("arguments[0].click();", botaoVoltar);
-    return this;
+        By botaoVoltarBy = By.xpath("//button[.//svg[@data-testid='ArrowBackIcon']]");
+        WebElement botaoVoltar = wait.until(ExpectedConditions.presenceOfElementLocated(botaoVoltarBy));
+        js.executeScript("arguments[0].click();", botaoVoltar);
+        return this;
     }
 
     public String pegarSrcVideo() {
-    By iframePlayer = By.cssSelector("iframe[src*='youtube'], iframe[src*='player'], iframe[src*='embed']");
-    WebElement iframe = wait.until(ExpectedConditions.visibilityOfElementLocated(iframePlayer));
-    return iframe.getAttribute("src");
+        By iframePlayer = By.cssSelector("iframe[src*='youtube'], iframe[src*='player'], iframe[src*='embed']");
+        WebElement iframe = wait.until(ExpectedConditions.visibilityOfElementLocated(iframePlayer));
+        return iframe.getAttribute("src");
+    }
+
+    public ListCursoPage materiaisExtra() {
+        By botaoMateriaisExtra = By.xpath("//button[normalize-space()='Materiais Extras']");
+        WebElement botao = wait.until(ExpectedConditions.elementToBeClickable(botaoMateriaisExtra));
+        js.executeScript("arguments[0].click();", botao);
+        return this;
+    }
+
+    public boolean mensagemSemMateriaisExtraEstaNaTela() {
+        By mensagem = By.xpath("//p[normalize-space()='Não existem materiais extras relacionados a esta aula.']");
+        try {
+            WebElement elemento = wait.until(ExpectedConditions.visibilityOfElementLocated(mensagem));
+            return elemento.isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
 }

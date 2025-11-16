@@ -87,7 +87,7 @@ public class ListCursoTest {
     @Test
     @DisplayName("Clicar para ir para o próximo vídeo e depois voltar para o inicial")
     void CT50_1() throws InterruptedException {
-                Thread.sleep(5000);
+        Thread.sleep(5000);
         listCursoPage.abrirPaginaCursos()
                 .abaEmAndamento()
                 .abrirCurso("Teste em Andamento")
@@ -103,4 +103,35 @@ public class ListCursoTest {
         assertEquals(srcVideoInicial, srcVoltando, "Algum dos botões não funcionou");
     }
 
+    @Test  
+    @DisplayName("Acessar materiais extras de um curso que não tem materiais extras")
+    void CT51() throws InterruptedException {
+        Thread.sleep(5000);
+        listCursoPage.abrirPaginaCursos()
+                .abaEmAndamento()
+                .abrirCurso("Teste em Andamento");
+
+        Thread.sleep(3000);
+
+        listCursoPage.materiaisExtra();
+
+        assertTrue(listCursoPage.mensagemSemMateriaisExtraEstaNaTela(), "A mensagem de ausência de materiais extras não apareceu.");
+
+    }
+
+    @Test  
+    @DisplayName("Acessar materiais extras de um curso que TEM materiais extras")
+    void CT51_1() throws InterruptedException {
+        Thread.sleep(5000);
+        listCursoPage.abrirPaginaCursos()
+                .abaEmAndamento()
+                .abrirCurso("Tenho materias");
+
+        Thread.sleep(3000);
+
+        listCursoPage.materiaisExtra();
+
+        assertFalse(listCursoPage.mensagemSemMateriaisExtraEstaNaTela(), "A mensagem de ausência de materiais extras apareceu.");
+
+    }
 }
