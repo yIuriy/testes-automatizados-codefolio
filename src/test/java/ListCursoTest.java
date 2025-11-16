@@ -29,6 +29,7 @@ public class ListCursoTest {
 
     // RF48 – Selecionar Vídeo (ver se o vídeo aparece ao entrar no curso)
     @Test
+    @DisplayName("Verifica acesso à curso sem senha na aba de disponíveis")
     public void CT48() {
         ListCursoPage course = new ListCursoPage(driver);
 
@@ -39,8 +40,10 @@ public class ListCursoTest {
                 "O vídeo não apareceu na tela do curso.");
     }
 
+
     // RF49 – Assistir Vídeo (clicar para assistir e confirmar que carregou)
     @Test
+    @DisplayName("Verifica se vídeo do Youtube carregou em curso sem senha na aba de disponíveis")
     void CT49() throws InterruptedException {
         ListCursoPage course = new ListCursoPage(driver);
 
