@@ -31,14 +31,31 @@ public class ListCursoTest {
 
     // RF48 – Selecionar Vídeo
     @Test
-    @DisplayName("Verifica acesso à curso sem senha na aba de disponíveis")
+    @DisplayName("Verifica acesso à curso sem senha na aba Em Andamento")
     void CT48() {
         try {
             Thread.sleep(5000);
             listCursoPage.abrirPaginaCursos()
                     .abaEmAndamento()
-                    .abrirCurso("Teste em Andamento")
+                    .abrirCurso("Teste")
                     .clicarVerVideoPorTitulo("video1");
+
+            assertTrue(listCursoPage.videoEstaNaTela(),
+                    "O vídeo não apareceu na tela do curso.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Verifica acesso à curso sem senha na aba de Concluídos")
+    void CT48_1() {
+        try {
+            Thread.sleep(5000);
+            listCursoPage.abrirPaginaCursos()
+                    .abaConcluido()
+                    .abrirCurso("Teste")
+                    .clicarVerVideoPorTitulo("Selenium com Java");
 
             assertTrue(listCursoPage.videoEstaNaTela(),
                     "O vídeo não apareceu na tela do curso.");
@@ -49,7 +66,7 @@ public class ListCursoTest {
     
     // RF49 – Assistir Vídeo
     @Test
-    @DisplayName("Verifica se vídeo do Youtube carregou em curso sem senha na aba de disponíveis")
+    @DisplayName("Verifica se vídeo do Youtube carregou em curso sem senha na aba Em Andamento")
     void CT49() {
         try {
             Thread.sleep(5000);
@@ -57,6 +74,24 @@ public class ListCursoTest {
                     .abaEmAndamento()
                     .abrirCurso("Teste em Andamento")
                     .clicarVerVideoPorTitulo("video1");
+
+            assertTrue(listCursoPage.videoCarregou(), "O vídeo não carregou.");
+            Thread.sleep(3000); // simula assistir
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+        @Test
+    @DisplayName("Verifica se vídeo do Youtube carregou em curso sem senha na aba de Concluídos")
+    void CT49_1() {
+        try {
+            Thread.sleep(5000);
+            listCursoPage.abrirPaginaCursos()
+                    .abaConcluido()
+                    .abrirCurso("Teste")
+                    .clicarVerVideoPorTitulo("Selenium com Java");
 
             assertTrue(listCursoPage.videoCarregou(), "O vídeo não carregou.");
             Thread.sleep(3000); // simula assistir
