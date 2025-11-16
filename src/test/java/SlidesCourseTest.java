@@ -1,13 +1,10 @@
+import com.sun.source.tree.AssertTree;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import model.Aluno;
-import org.jetbrains.annotations.NotNull;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,9 +12,6 @@ import pages.*;
 import utils.Authentication;
 
 import java.time.Duration;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class SlidesCourseTest {
     WebDriver driver;
@@ -42,26 +36,81 @@ public class SlidesCourseTest {
     }
 
     @Test
+    void adicionarFurretExtra() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Grupo 01");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Slides");
+            manageSlidePage.inserirTituloNoSlide("Furret Extra");
+            manageSlidePage.inserirLinkDoSlide("https://docs.google.com/presentation/d/e/2PACX-1vQj0RqOKJlzEPMf57kLonB8rfwuWv6JRMmIpqRkhpxRcFPJyI8oz6KWqpG7FKSS9LQViN2PsuSoWGnp/pub?start=false&loop=false&delayms=3000");
+            manageSlidePage.inserirDescricaoNoSlide("Descrição Furret");
+            manageSlidePage.clicarBotaoAdicionarSlide();
+            manageSlidePage.verificarSeSlideFoiAdicionado();
+            manageSlidePage.clicarBotaoOkSlide();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
     void CT09() {
         try {
-            Thread.sleep(10000);
+            Thread.sleep(5000);
             irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Grupo 01");
             manageCoursePage.localizarEClicarNoMenuPorNome("Slides");
             manageSlidePage.clicarBotaoEditarSlideDoPrimeiroSlide();
-            manageSlidePage.inserirTituloNoSlide("Furret");
-
+            manageSlidePage.inserirTituloNoSlide("Furret Extra");
             manageSlidePage.inserirLinkDoSlide("https://docs.google.com/presentation/d/e/2PACX-1vQj0RqOKJlzEPMf57kLonB8rfwuWv6JRMmIpqRkhpxRcFPJyI8oz6KWqpG7FKSS9LQViN2PsuSoWGnp/pub?start=false&loop=false&delayms=3000");
-
             manageSlidePage.inserirDescricaoNoSlide("Descrição Furret");
-
             manageSlidePage.clicarBotaoSalvarAlteracoes();
-
             manageSlidePage.verificarSeSlideFoiAtualizado();
-            assertTrue(true);
+            manageSlidePage.clicarBotaoOkSlide();
+            System.out.println("O Slide foi editado com sucesso!");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    @Test
+    void CT010() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Grupo 01");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Slides");
+            manageSlidePage.clicarBotaoExcluirSlideDoPrimeiroSlide();
+            manageSlidePage.clicarBotaoExcluir();
+            manageSlidePage.verificarSeSlideFoiExcluido();
+            System.out.println("O Slide foi excluído com sucesso!");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    void CT011() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Grupo 01");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Materiais Extras");
+            manageSlidePage.inserirTituloMaterialExtra("Wiki Furret");
+            manageSlidePage.inserirLinkMaterialExtra("https://bulbapedia.bulbagarden.net/wiki/Furret_(Pok%C3%A9mon)");
+            manageSlidePage.clicarBotaoAdicionarMaterial();
+            manageSlidePage.verificarSeMaterialFoiAdicionado();
+            manageSlidePage.clicarBotaoOkMaterial();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // O sistema não permite realizar alterações em um material extra após ele ser adicionado
+    @Test
+    void CT012() {
+        System.out.println("CT012");
     }
 
     private void irAteAPaginaDeGerenciarCursos() {
