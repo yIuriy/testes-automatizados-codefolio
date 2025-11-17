@@ -73,4 +73,5 @@ public class Cursostest {
         assertTrue(urlAtual.contains("/classes"), "A URL não mudou para /classes após inserir o PIN.");
         Thread.sleep(1000); // Pausa
     }
+    
 }

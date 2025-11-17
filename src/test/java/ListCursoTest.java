@@ -1,6 +1,9 @@
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import static org.junit.jupiter.api.Assertions.*;
@@ -168,5 +171,42 @@ public class ListCursoTest {
 
         assertFalse(listCursoPage.mensagemSemMateriaisExtraEstaNaTela(), "A mensagem de ausência de materiais extras apareceu.");
 
+    }
+    @Test
+    void CT38() {
+        try {
+            Thread.sleep(5000);
+            listCursoPage.abrirPaginaCursos()
+                    .abaEmAndamento()
+                    // 1. Acessar um curso
+                    .abrirCurso("Teste") 
+                    
+                    .clicarVerVideoPorTitulo("video1");
+
+            // Resultado Esperado (CT-38/39): O vídeo aparece na tela
+            assertTrue(listCursoPage.videoEstaNaTela(),
+                    "O vídeo não apareceu na tela do curso.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // RF39 – Assistir Vídeo (CT-39)
+    @Test
+    @DisplayName("Verifica se vídeo do Youtube carregou em curso sem senha na aba Em Andamento")
+    void CT39() {
+        try {
+            Thread.sleep(5000);
+            listCursoPage.abrirPaginaCursos()
+                    .abaEmAndamento()
+                    
+                    .abrirCurso("Teste em Andamento") 
+                    .clicarVerVideoPorTitulo("video1");
+            assertTrue(listCursoPage.videoCarregou(), "O vídeo não carregou.");
+            Thread.sleep(3000); // simula assistir
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
