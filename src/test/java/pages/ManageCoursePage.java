@@ -285,6 +285,28 @@ public class ManageCoursePage {
         Utilitarios.centralizarElementoNaTela(tituloSecao, driver);
     }
 
+    public WebElement obterInputDeNomeDaAvaliacao() {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//input[contains(@placeholder, 'Ex: T1, A1, Projeto Final')]")
+        ));
+    }
+
+    public WebElement obterInputDeNotaDaAvaliacao() {
+        String idInputNota = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//label[contains(text(), 'Percentual na Nota Final')]")
+        )).getAttribute("for");
+        assertNotNull(idInputNota);
+        return wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.id(idInputNota)
+        ));
+    }
+
+    public WebElement obterBotaoAdicionarAvaliacao() {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//button[contains(text(), 'Adicionar Avaliação')]")
+        ));
+    }
+
     /**
      * Localiza e retorna o tr de uma avaliação com base no nome dela.
      *
@@ -388,6 +410,17 @@ public class ManageCoursePage {
             somaTotal += percentual;
         }
         return somaTotal;
+    }
+
+    public boolean verificarSeMensagemAvaliacaoCadastradaComSucessoApareceu() {
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//div[contains(text(), 'Avaliação criada com sucesso!')]")
+            ));
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     /**
