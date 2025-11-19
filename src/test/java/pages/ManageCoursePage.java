@@ -425,5 +425,23 @@ public class ManageCoursePage {
 
         divContainerFiltroAtivo.findElement(By.tagName("svg")).click();
     }
+
+    public WebElement obterRoleAluno(WebElement trAluno) {
+        List<WebElement> elementosDentroDoTrAluno = trAluno.findElements(By.cssSelector("th, td"));
+        return elementosDentroDoTrAluno.get(4);
+    }
+
+    public String obterValorRoleAluno(WebElement trAluno) {
+        return obterRoleAluno(trAluno).getText();
+    }
+
+    public void alterarRoleDoAluno(WebElement trAluno, String novoRole) {
+        obterRoleAluno(trAluno).click();
+        Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//li[contains(text(), '" + novoRole + "')]")
+        ))).click();
+    }
+
+
 }
 
