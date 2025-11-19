@@ -18,6 +18,7 @@ public class Authentication {
     // ajuste se o DB / store tiver nome diferente
     private static final String FIREBASE_DB = "firebaseLocalStorageDb";
     private static final String FIREBASE_STORE = "firebaseLocalStorage";
+    private static final String baseUrl = "https://testes-codefolio.web.app/";
 
     public Authentication(WebDriver driver) {
         this.driver = driver;
@@ -26,7 +27,7 @@ public class Authentication {
     }
 
     public void abrir() {
-        driver.get("https://react-na-pratica.web.app/login");
+        driver.get(baseUrl + "login");
     }
 
     /**
@@ -35,12 +36,12 @@ public class Authentication {
      *
      * @see Authentication#realizarLoginViaIndexedBD()
      */
-    public void realizarLoginViaLocalStorage(){
+    public void realizarLoginViaLocalStorage() {
         String key = dotenv.get("FIREBASE_KEY");
         String value = dotenv.get("FIREBASE_VALUE");
         driver.manage().window().maximize();
         // 1. Carrega o domínio
-       driver.get("https://testes.codefolio.com.br/");
+        driver.get("https://testes.codefolio.com.br/");
         // 2. Injeta os dados no Local Storage
         System.out.println("Injetando dados de autenticação no Local Storage...");
         try {
@@ -150,7 +151,7 @@ public class Authentication {
         // aqui uso um wait genérico: aguarda até o firebase criar o DB de usuário (exemplo).
         // Troque pela condição real da sua aplicação (ex.: driver.findElement(By.id("avatar")))
 
-        driver.get("https://react-na-pratica.web.app/dashboard");
+        driver.get(baseUrl + "dashboard");
         wait.until(ExpectedConditions.urlContains("dashboard"));
 
         System.out.println("Login automático concluído (injetado via IndexedDB).");
