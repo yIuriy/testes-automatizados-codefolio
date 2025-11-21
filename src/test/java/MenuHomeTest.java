@@ -1,9 +1,11 @@
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.StructuredTaskScope.TimeoutException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,9 +47,10 @@ public class MenuHomeTest {
     // Reprovou
     @Test
     void CT40_1() {
-        
-        //   Objetivo: Verificar se o sistema computa corretamente o like, cancelamento do
-        //  like, dislike e cancelamento do dislike do estudante diretamente pela página “Home”.
+
+        // Objetivo: Verificar se o sistema computa corretamente o like, cancelamento do
+        // like, dislike e cancelamento do dislike do estudante diretamente pela página
+        // “Home”.
 
         try {
             Thread.sleep(4000);
@@ -61,12 +64,12 @@ public class MenuHomeTest {
 
             menuHomePage.clicarEmLike("Selenium (Testes Automatizados)");
             Thread.sleep(3000);
-            assertEquals(numLikesInicial, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));       
+            assertEquals(numLikesInicial, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
 
             menuHomePage.clicarEmDislike("Selenium (Testes Automatizados)");
             Thread.sleep(3000);
-            assertEquals(numLikesInicial -1, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));       
-            
+            assertEquals(numLikesInicial - 1, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
+
             menuHomePage.clicarEmDislike("Selenium (Testes Automatizados)");
             Thread.sleep(3000);
             assertEquals(numLikesInicial, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
@@ -79,9 +82,9 @@ public class MenuHomeTest {
     // Reprovou
     @Test
     void CT40_2() {
-        
-        //   Objetivo: Verificar se o sistema computa corretamente a mudança direta de 
-        //  like para dislike e vice-versa, do estudante diretamente pela página “Home”.
+
+        // Objetivo: Verificar se o sistema computa corretamente a mudança direta de
+        // like para dislike e vice-versa, do estudante diretamente pela página “Home”.
 
         try {
             Thread.sleep(4000);
@@ -94,11 +97,11 @@ public class MenuHomeTest {
 
             menuHomePage.clicarEmDislike("Selenium (Testes Automatizados)");
             Thread.sleep(3000);
-            assertEquals(numLikesInicial -1, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));       
-            
+            assertEquals(numLikesInicial - 1, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
+
             menuHomePage.clicarEmLike("Selenium (Testes Automatizados)");
             Thread.sleep(3000);
-            assertEquals(numLikesInicial +1, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));       
+            assertEquals(numLikesInicial + 1, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -108,8 +111,8 @@ public class MenuHomeTest {
     // Reprovou
     @Test
     void CT41() {
-        
-        //   Objetivo: Verificar se o sistema permite a adição de um comentário ao vídeo.
+
+        // Objetivo: Verificar se o sistema permite a adição de um comentário ao vídeo.
 
         try {
             Thread.sleep(4000);
@@ -128,8 +131,8 @@ public class MenuHomeTest {
 
             assertNotNull(retorno);
 
-            if (!retorno.isEmpty()){
-            assertEquals(texto, retorno);
+            if (!retorno.isEmpty()) {
+                assertEquals(texto, retorno);
             }
 
         } catch (Exception e) {
@@ -139,30 +142,32 @@ public class MenuHomeTest {
 
     // Passou
     @Test
-    void CT42(){
+    void CT42() {
 
-        //   Objetivo: Verificar se o botão de compartilhar cola o Link do vídeo na área de transferência.
+        // Objetivo: Verificar se o botão de compartilhar cola o Link do vídeo na área
+        // de transferência.
 
-        try{
-        Thread.sleep(4000);
-        irAteAHome();
+        try {
+            Thread.sleep(4000);
+            irAteAHome();
             menuHomePage.clicarEmCompartilhar("Selenium (Testes Automatizados)");
             String areaDeTransferencia = menuHomePage.pegarTextoDaAreaDeTransferencia();
 
-            assertEquals("https://youtu.be/Fw9YW5_MZRs", areaDeTransferencia);
+            assertEquals("https://www.youtube.com/watch?v=Fw9YW5_MZRs", areaDeTransferencia);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
     // Passou
     @Test
-    void CT43(){
+    void CT43() {
 
-        // Objetivo: Verificar se o sistema permite o acesso a cursos que não exigem PIN.
+        // Objetivo: Verificar se o sistema permite o acesso a cursos que não exigem
+        // PIN.
 
-        try{
+        try {
             Thread.sleep(4000);
             irAteAHome();
 
@@ -170,10 +175,44 @@ public class MenuHomeTest {
             Thread.sleep(4000);
             assertTrue(menuHomePage.verificarSeEntrouNoCurso());
 
-
-        }catch(Exception e){
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    // Passou
+    @Test
+    void CT44_1() {
+        // Objetivo: Verificar se o sistema bloqueia o acesso ao curso quando o PIN incorreto é inserido.
+
+        try {
+            Thread.sleep(4000);
+            irAteAHome();
+            
+            menuHomePage.tentarAcessarCursoComPIN("Grupo1", "54321");
+            assertFalse(menuHomePage.verificarSeEntrouNoCurso());
+            
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    // Passou
+    @Test
+    void CT44_2() {
+        // Objetivo: Verificar se o sistema permite o acesso ao curso quando o PIN correto é inserido.
+
+        try {
+            Thread.sleep(4000);
+            irAteAHome();
+
+            menuHomePage.tentarAcessarCursoComPIN("Grupo1", "12345");
+            assertTrue(menuHomePage.verificarSeEntrouNoCurso());
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+
     }
 
     private void irAteAHome() {

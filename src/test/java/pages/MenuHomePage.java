@@ -42,6 +42,35 @@ public class MenuHomePage {
         }
     }
 
+    public void tentarAcessarCursoComPIN(String nomeCurso, String senha){
+        WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+        By.xpath("//div[./h6[normalize-space() = 'Cursos Recomendados']]")
+    ));
+    WebElement curso = div.findElement(
+        By.xpath(".//div[.//button and div[contains(normalize-space(), '" + nomeCurso + "')]]")
+    );
+
+    curso.findElement(
+        By.xpath(".//button[contains(normalize-space(), 'Acessar')]")
+    ).click();
+
+    WebElement painelDoPIN = wait.until(ExpectedConditions.presenceOfElementLocated(
+        By.xpath("//div[h6[contains(normalize-space(), 'Você está tentando acessar um curso que requer uma chave de acesso')]]")
+    ));
+
+    WebElement input = painelDoPIN.findElement(
+        By.xpath(".//input")
+    );
+    input.click();
+    input.clear();
+    input.sendKeys(senha);
+    
+    painelDoPIN.findElement(
+        By.xpath(".//button[contains(normalize-space(), 'Enviar')]")
+    ).click();
+    
+    }
+
     public void acessarCursoSemPIN() {
 
     WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
