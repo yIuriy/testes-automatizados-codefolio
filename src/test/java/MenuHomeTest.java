@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.StructuredTaskScope.TimeoutException;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -42,6 +43,10 @@ public class MenuHomeTest {
         authentication.realizarLoginViaIndexedBD();
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         js = (JavascriptExecutor) driver;
+    }
+    @AfterEach
+    void teardown() {
+        if (driver != null) driver.quit();
     }
 
     // Reprovou

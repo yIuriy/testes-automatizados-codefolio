@@ -32,6 +32,35 @@ public class ListCursoTest {
         if (driver != null) driver.quit();
     }
 
+    @Test
+    void CT45(){
+        try{
+        Thread.sleep(4000);
+        listCursoPage.abrirPaginaCursos();
+
+        Thread.sleep(2000);
+        assertTrue(listCursoPage.verificarSeCurosAparece("Introdução a IHC"));
+        assertFalse(listCursoPage.verificarSeCurosAparece("Amanhecer"));
+        assertFalse(listCursoPage.verificarSeCurosAparece("Testes Grupo1"));
+
+        listCursoPage.abaConcluido();
+        Thread.sleep(2000);
+        assertTrue(listCursoPage.verificarSeCurosAparece("Amanhecer"));
+        assertFalse(listCursoPage.verificarSeCurosAparece("Testes Grupo1"));
+        assertFalse(listCursoPage.verificarSeCurosAparece("Introdução a IHC"));
+
+        listCursoPage.abaEmAndamento();
+        Thread.sleep(2000);
+        assertTrue(listCursoPage.verificarSeCurosAparece("Testes Grupo1"));
+        assertFalse(listCursoPage.verificarSeCurosAparece("Amanhecer"));
+        assertFalse(listCursoPage.verificarSeCurosAparece("Introdução a IHC"));
+        
+
+        }catch(Exception e){
+System.err.println(e.getMessage());
+        }
+    }
+
     // RF48 – Selecionar Vídeo
     @Test
     @DisplayName("Verifica acesso à curso sem senha na aba Em Andamento")

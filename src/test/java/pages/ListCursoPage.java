@@ -138,4 +138,18 @@ public ListCursoPage abaEmAndamento() {
         }
     }
 
+    public boolean verificarSeCurosAparece(String nomeCurso){
+
+        try{
+
+            WebElement div = driver.findElement(
+                By.xpath("//div[//h6[contains(normalize-space(), '"+nomeCurso+"')]]")
+            );
+
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+
 }
