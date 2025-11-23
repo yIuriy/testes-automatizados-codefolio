@@ -32,6 +32,7 @@ public class ListCursoTest {
         if (driver != null) driver.quit();
     }
 
+
     @Test
     void CT45(){
         try{
@@ -69,7 +70,7 @@ System.err.println(e.getMessage());
             Thread.sleep(5000);
             listCursoPage.abrirPaginaCursos()
                     .abaEmAndamento()
-                    .abrirCurso("Teste")
+                    .abrirCurso("Teste em Andamento")
                     .clicarVerVideoPorTitulo("video1");
 
             assertTrue(listCursoPage.videoEstaNaTela(),
@@ -87,7 +88,7 @@ System.err.println(e.getMessage());
             listCursoPage.abrirPaginaCursos()
                     .abaConcluido()
                     .abrirCurso("Teste")
-                    .clicarVerVideoPorTitulo("Selenium com Java");
+                    .clicarVerVideoPorTitulo("Vídeo Teste");
 
             assertTrue(listCursoPage.videoEstaNaTela(),
                     "O vídeo não apareceu na tela do curso.");
@@ -123,7 +124,7 @@ System.err.println(e.getMessage());
             listCursoPage.abrirPaginaCursos()
                     .abaConcluido()
                     .abrirCurso("Teste")
-                    .clicarVerVideoPorTitulo("Selenium com Java");
+                    .clicarVerVideoPorTitulo("Vídeo Teste");
 
             assertTrue(listCursoPage.videoCarregou(), "O vídeo não carregou.");
             Thread.sleep(3000); // simula assistir
@@ -170,6 +171,7 @@ System.err.println(e.getMessage());
         assertEquals(srcVideoInicial, srcVoltando, "Algum dos botões não funcionou");
     }
 
+    // RF51 – Acessar Materiais Extras
     @Test  
     @DisplayName("Acessar materiais extras de um curso que não tem materiais extras")
     void CT51() throws InterruptedException {
@@ -192,15 +194,42 @@ System.err.println(e.getMessage());
         Thread.sleep(5000);
         listCursoPage.abrirPaginaCursos()
                 .abaEmAndamento()
-                .abrirCurso("Tenho materias");
+                .abrirCurso("Materiais Extras");
 
         Thread.sleep(3000);
 
         listCursoPage.materiaisExtra();
 
         assertFalse(listCursoPage.mensagemSemMateriaisExtraEstaNaTela(), "A mensagem de ausência de materiais extras apareceu.");
-
     }
+    //RF52 - Acessar Quiz Desbloqueado
+    @Test  
+    @DisplayName("Verificar o acesso a quizzes desbloqueados no curso")
+    void CT52() throws InterruptedException {
+        Thread.sleep(5000);
+        listCursoPage.abrirPaginaCursos()
+                .abaEmAndamento()
+                .abrirCurso("Teste em Andamento");
+
+        Thread.sleep(3000);
+        listCursoPage.clicaFazerQuiz();
+        assertFalse(listCursoPage.mensagemDeBloqueioQuiz(), "A mensagem de bloqueio do quiz apareceu.");
+    }
+
+    //RF53 - Acessar Quiz Bloqueado
+    @Test  
+    @DisplayName("Verificar o acesso a quizzes desbloqueados no curso")
+    void CT53() throws InterruptedException {
+        Thread.sleep(5000);
+        listCursoPage.abrirPaginaCursos()
+                .abaEmAndamento()
+                .abrirCurso("Teste em Andamento");
+
+        Thread.sleep(3000);
+        listCursoPage.clicaQuizBloqueado();
+        assertTrue(listCursoPage.mensagemDeBloqueioQuiz(), "A mensagem de bloqueio do quiz não apareceu.");
+    }
+
     @Test
     void CT38() {
         try {

@@ -138,6 +138,37 @@ public ListCursoPage abaEmAndamento() {
         }
     }
 
+    public ListCursoPage clicaFazerQuiz() {
+        WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(12));
+        By botaoFazerQuiz = By.xpath("//button[contains(normalize-space(.),'Fazer Quiz')]");
+        WebElement btn = w.until(ExpectedConditions.elementToBeClickable(botaoFazerQuiz));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", btn);
+        btn.click();
+        return this;
+    }
+
+    public ListCursoPage clicaQuizBloqueado() {
+    WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(12));
+    By botaoQuizBloqueado = By.xpath("//button[contains(normalize-space(.), 'Quiz Bloqueado')]");
+    WebElement btn = w.until(ExpectedConditions.elementToBeClickable(botaoQuizBloqueado));
+    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", btn);
+    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+    return this;
+}
+
+
+
+    public boolean mensagemDeBloqueioQuiz() {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            WebElement toast = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".Toastify__toast")));
+            String bloqueio = toast.getText();
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
     public boolean verificarSeCurosAparece(String nomeCurso){
 
         try{
