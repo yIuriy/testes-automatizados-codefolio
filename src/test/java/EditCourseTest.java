@@ -136,6 +136,118 @@ public class EditCourseTest {
         System.out.println("TESTE APROVADO: O curso foi excluído com sucesso.");
     }
 
+    @Test
+    void CT_05_cadastroDeVideo() {
+        irAteAPaginaDeGerenciarCursos();
+        WebElement btnGenDoCard = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//h6[normalize-space()='Introdução ao Java']/ancestor::div[contains(@class, 'MuiCardContent-root')]/following-sibling::div//button[normalize-space()='Gerenciar Curso']")
+        ));
+        js.executeScript("arguments[0].click();", btnGenDoCard);
+
+        WebElement inputTitulo = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//label[text()='Título do Vídeo']/following-sibling::div//input")
+        ));
+        inputTitulo.sendKeys("One Frame");
+
+        WebElement inputDescricao = driver.findElement(
+                By.xpath("//label[text()='Descrição do Vídeo']/following-sibling::div//textarea[1]")
+        );
+
+        inputDescricao.sendKeys("Apresentação inicial sobre variáveis e tipos");
+
+        WebElement inputLink = driver.findElement(
+                By.xpath("//label[text()='URL do Vídeo']/following-sibling::div//input")
+        );
+
+        inputLink.sendKeys("https://www.youtube.com/watch?v=abc123");
+
+
+        WebElement btnSalvarVideo = driver.findElement(
+                By.xpath("//button[normalize-space()='Adicionar Vídeo']")
+        );
+
+        js.executeScript("arguments[0].click();", btnSalvarVideo);
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[text()='Vídeo adicionado com sucesso!']")
+        ));
+
+        WebElement btnOkDoModal = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//div[@role='presentation']//button[normalize-space()='OK']")
+        ));
+
+        js.executeScript("arguments[0].click();", btnOkDoModal);
+
+        WebElement videoNaLista = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[normalize-space()='One Frame']")
+        ));
+
+
+        assertTrue(videoNaLista.isDisplayed(), "O vídeo 'One Frame' não foi encontrado na lista.");
+        System.out.println("\n--- RESULTADO DO TESTE CT-05 ---");
+        System.out.println("TESTE APROVADO: Vídeo cadastrado com sucesso.");
+    }
+
+    @Test
+    void CT_06_exclusaoVideo() {
+        // 1. Navegação
+        irAteAPaginaDeGerenciarCursos();
+
+        // 2. Entrar no curso e navegar para aba Vídeos
+        WebElement btnGenDoCard = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//h6[contains(text(), 'Introdução ao Java')]/ancestor::div[contains(@class, 'MuiCard-root')]//button[normalize-space()='Gerenciar Curso']")
+        ));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btnGenDoCard);
+
+        wait.until(ExpectedConditions.urlContains("courseId"));
+
+        wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(., 'VÍDEOS') or contains(., 'Vídeos')]")
+        )).click();
+
+        System.out.println("Aguardando lista carregar...");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//ul[contains(@class, 'MuiList-root')]")));
+
+        // --- AQUI ESTÁ A CORREÇÃO ---
+
+        System.out.println("Localizando botão de delete diretamente...");
+
+    /* XPATH "FOLLOWING" (Mais seguro para React):
+       1. //span[normalize-space()='One Frame'] -> Acha o texto.
+       2. /following::button -> Olha para frente no HTML a partir desse texto.
+       3. [.//svg[@data-testid='DeleteIcon']] -> Pega o botão que tem o ícone de lixeira.
+       4. [1] -> Pega apenas o PRIMEIRO que aparecer (o que está na mesma linha).
+    */
+        By locatorBotao = By.xpath("//span[normalize-space()='One Frame']/following::button[.//svg[@data-testid='DeleteIcon']][1]");
+
+        // Espera explícita pelo BOTÃO FINAL (não pelo pai)
+        WebElement btnDelete = wait.until(ExpectedConditions.presenceOfElementLocated(locatorBotao));
+
+        // Scroll para garantir visibilidade
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", btnDelete);
+
+        // Highlight para debug visual
+        ((JavascriptExecutor) driver).executeScript("arguments[0].style.border='3px solid red'", btnDelete);
+
+        System.out.println("Botão encontrado. Clicando via JS...");
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btnDelete);
+
+        // 5. Confirmação (Modal)
+        System.out.println("Confirmando exclusão...");
+        WebElement btnConfirmar = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//div[@role='dialog']//button[contains(text(), 'SIM') or contains(text(), 'EXCLUIR')]")
+        ));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btnConfirmar);
+
+        // 6. Validação
+        boolean sumiu = wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//span[normalize-space()='One Frame']")
+        ));
+
+        assertTrue(sumiu, "ERRO: O vídeo não sumiu da lista.");
+        System.out.println("CT-06 PASSOU.");
+    }
+
     private void irAteAPaginaDeGerenciarCursos() {
         // 1. Clica no ícone do avatar (usando JS)
         WebElement btnAvatar = wait.until(ExpectedConditions.elementToBeClickable(
