@@ -1,5 +1,4 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-import jdk.jshell.execution.Util;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.DashboardPage;
 import pages.ManageCoursePage;
+import pages.MinhasAvaliacoesPage;
 import utils.Authentication;
 import utils.Utilitarios;
 
@@ -23,6 +23,7 @@ public class AvaliacaoTest {
     ManageCoursePage manageCoursePage;
     WebDriverWait wait;
     DashboardPage dashboardPage;
+    MinhasAvaliacoesPage minhasAvaliacoesPage;
     JavascriptExecutor js;
 
     @BeforeEach
@@ -32,6 +33,7 @@ public class AvaliacaoTest {
         authentication = new Authentication(driver);
         manageCoursePage = new ManageCoursePage(driver);
         dashboardPage = new DashboardPage(driver);
+        minhasAvaliacoesPage = new MinhasAvaliacoesPage(driver);
         authentication.realizarLoginViaIndexedBD();
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         js = (JavascriptExecutor) driver;
@@ -80,7 +82,7 @@ public class AvaliacaoTest {
      *
      */
     @Test
-    @DisplayName("Consulta de Avaliações de Alunos com aluno já tendo nota atribuída")
+    @DisplayName("Consulta de Avaliações de Alunos com múltiplos alunos")
     void CT19_1() {
         try {
             Thread.sleep(5000);
@@ -990,6 +992,150 @@ public class AvaliacaoTest {
         }
     }
 
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 25/11/2025
+     *
+     */
+    @Test
+    @DisplayName("Excluir avaliação com sucesso em curso com mais de uma avaliação")
+    void CT24() {
+        try {
+            Thread.sleep(5000);
+            irAtePaginaMinhasAvaliacoes();
+
+            WebElement divPrincipalDoCurso = minhasAvaliacoesPage.obterDivDasAvaliacoesDoCursoPorNomeDoCurso("Curso para " +
+                    "Excluir Avaliação");
+
+            assertEquals("Iuri da Silva Fernandes", minhasAvaliacoesPage.obterNomeDoAluno(divPrincipalDoCurso));
+
+            WebElement h3ComBotaoQueAbreAvaliacoes = minhasAvaliacoesPage.obterElementoQueAbreAsAvaliacoesDoCurso(divPrincipalDoCurso);
+            assertEquals("2 avaliações",
+                    minhasAvaliacoesPage.obterQuantidadeTotalDeAvaliacoesPresentesNoCurso(h3ComBotaoQueAbreAvaliacoes));
+
+            h3ComBotaoQueAbreAvaliacoes.click();
+
+            wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//div[contains(@class,'MuiAccordionDetails')]")
+            ));
+
+            Thread.sleep(2000);
+            divPrincipalDoCurso = minhasAvaliacoesPage.obterDivDasAvaliacoesDoCursoPorNomeDoCurso("Curso para Excluir" +
+                    " Avaliação");
+
+            WebElement divAvaliacaoA1 = minhasAvaliacoesPage.obterDivDaAvaliacao(divPrincipalDoCurso, "A1");
+
+            assertEquals("A1", minhasAvaliacoesPage.obterTituloDaDivAvaliacao(divAvaliacaoA1));
+            assertEquals("Sem nota", minhasAvaliacoesPage.obterNotaDaDivAvaliacao(divAvaliacaoA1));
+
+            WebElement divAvaliacaoParaExcluir = minhasAvaliacoesPage.obterDivDaAvaliacao(divPrincipalDoCurso, "Avaliação para Excluir");
+
+            assertEquals("Avaliação para Excluir", minhasAvaliacoesPage.obterTituloDaDivAvaliacao(divAvaliacaoParaExcluir));
+            assertEquals("5", minhasAvaliacoesPage.obterNotaDaDivAvaliacao(divAvaliacaoParaExcluir));
+
+            Utilitarios.scrollarTela(js, "500");
+            Thread.sleep(2000);
+
+            assertEquals("2,50",
+                    minhasAvaliacoesPage.obterH5DaNotaTotal(divPrincipalDoCurso).getText());
+
+            Thread.sleep(2000);
+
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Excluir Avaliação");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+
+            WebElement trAvaliacaoParaExcluir = manageCoursePage.
+                    localizarLinhaDaAvaliacaoPorNome("Avaliação para Excluir");
+
+            Utilitarios.centralizarElementoNaTela(trAvaliacaoParaExcluir, driver);
+
+            manageCoursePage.clicarBotaoDeExcluirAvaliacao(trAvaliacaoParaExcluir);
+
+            Thread.sleep(1000);
+            irAtePaginaMinhasAvaliacoes();
+
+            divPrincipalDoCurso = minhasAvaliacoesPage.obterDivDasAvaliacoesDoCursoPorNomeDoCurso("Curso para " +
+                    "Excluir Avaliação");
+            Utilitarios.centralizarElementoNaTela(divPrincipalDoCurso, driver);
+
+            h3ComBotaoQueAbreAvaliacoes = minhasAvaliacoesPage.obterElementoQueAbreAsAvaliacoesDoCurso(divPrincipalDoCurso);
+            assertEquals("1 avaliações",
+                    minhasAvaliacoesPage.obterQuantidadeTotalDeAvaliacoesPresentesNoCurso(h3ComBotaoQueAbreAvaliacoes));
+
+            h3ComBotaoQueAbreAvaliacoes.click();
+
+            wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//div[contains(@class,'MuiAccordionDetails')]")
+            ));
+
+            Thread.sleep(2000);
+            divPrincipalDoCurso = minhasAvaliacoesPage.obterDivDasAvaliacoesDoCursoPorNomeDoCurso("Curso para Excluir" +
+                    " Avaliação");
+
+            divAvaliacaoA1 = minhasAvaliacoesPage.obterDivDaAvaliacao(divPrincipalDoCurso, "A1");
+
+            assertEquals("A1", minhasAvaliacoesPage.obterTituloDaDivAvaliacao(divAvaliacaoA1));
+            assertEquals("Sem nota", minhasAvaliacoesPage.obterNotaDaDivAvaliacao(divAvaliacaoA1));
+
+            Utilitarios.scrollarTela(js, "500");
+            Thread.sleep(2000);
+
+            assertEquals("0,00",
+                    minhasAvaliacoesPage.obterH5DaNotaTotal(divPrincipalDoCurso).getText());
+
+        } catch (Exception e) {
+            System.err.println("Erro no CT24: " + e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Excluir todas as avaliações de um curso faz mostrar mensagem ")
+    void CT24_1() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Excluir Avaliação");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("A1");
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+
+            assertEquals("A1", elementosDentroDoTrAvaliacao.getFirst().getText());
+
+            assertEquals("50%", elementosDentroDoTrAvaliacao.get(1).getText());
+
+
+            assertEquals(50,
+                    manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+
+            manageCoursePage.clicarBotaoDeExcluirAvaliacao(trAvaliacao);
+
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            Utilitarios.scrollarTela(js, "500");
+
+            WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+                            By.xpath("//h6[contains(text(), 'Avaliações Cadastradas')]")))
+                    .findElement(By.xpath(".."));
+
+            assertTrue(
+                    div.findElements(By.tagName("div")).stream().anyMatch(
+                            element -> element.getText().equalsIgnoreCase("Nenhuma avaliação cadastrada. Adicione sua primeira " +
+                                    "avaliação usando o formulário acima.")
+                    )
+            );
+
+            assertEquals("Total: 0% da nota final",
+                    manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
+
+        } catch (Exception e) {
+            System.err.println("Erro no CT24.1: " + e.getMessage());
+        }
+    }
+
 
     private boolean verificarValidadeDoInput(WebElement input) {
         Boolean valido = (Boolean) js.executeScript("return arguments[0].checkValidity()", input);
@@ -1007,6 +1153,11 @@ public class AvaliacaoTest {
         dashboardPage.abrirMenuDeOpcoesPerfil();
         dashboardPage.abrirMenuGerenciamentoDeCursos();
         wait.until(ExpectedConditions.urlContains("/manage-courses"));
+    }
+
+    private void irAtePaginaMinhasAvaliacoes() {
+        dashboardPage.abrirMenuMinhasAvaliacoes();
+        wait.until(ExpectedConditions.urlContains("/minhas-avaliacoes"));
     }
 
     private void verificarSeExisteMenuDeOpcoesDaAvaliacao(List<WebElement> elementos) {
