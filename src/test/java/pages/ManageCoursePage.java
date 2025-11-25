@@ -307,6 +307,18 @@ public class ManageCoursePage {
         ));
     }
 
+    public WebElement obterBotaoAtualizarAvaliacao() {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//button[contains(text(), 'Atualizar Avaliação')]")
+        ));
+    }
+
+    public WebElement obterBotaoCancelarAtualizacaoDaAvaliacao() {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//button[contains(text(), 'Cancelar')]")
+        ));
+    }
+
     /**
      * Localiza e retorna o tr de uma avaliação com base no nome dela.
      *
@@ -423,12 +435,27 @@ public class ManageCoursePage {
         }
     }
 
+    private List<WebElement> obterBotoesDeAcaoDaAvaliacao(WebElement trAvaliacao) {
+        List<WebElement> botoesDeAcao = trAvaliacao.findElements(By.tagName("button"));
+        assertNotNull(botoesDeAcao);
+        assertEquals(3, botoesDeAcao.size());
+        return botoesDeAcao;
+    }
+
+    public void clicarBotaoDeEditarAvaliacao(WebElement trAvaliacao) {
+        obterBotoesDeAcaoDaAvaliacao(trAvaliacao).getFirst().click();
+    }
+
+    public void clicarBotaoDeExcluirAvaliacao(WebElement trAvaliacao) {
+        obterBotoesDeAcaoDaAvaliacao(trAvaliacao).get(1).click();
+    }
+
     /**
      * Obtém o texto que informa qual a soma do percentual de todas as avaliações cadastradas em um curso.
      *
      * @return o texto com o percentual total no formato "Total: XX% da nota final"
      */
-    public String obterTextoDoTotalDaNotaFinal() {
+    public String obterTextoDoPercentualTotalDaNotaFinal() {
         return wait.until(
                 ExpectedConditions.presenceOfElementLocated(
                         By.xpath("//h6[contains(text(),'Total:')]")
@@ -442,10 +469,9 @@ public class ManageCoursePage {
      * @return o tbody que armazena os alunos
      */
     public WebElement obterTableBodyDosAlunosExibidos() {
-        WebElement trAlunos = wait.until(ExpectedConditions.presenceOfElementLocated(
+        return wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//tbody")
         ));
-        return trAlunos;
     }
 
     /**
