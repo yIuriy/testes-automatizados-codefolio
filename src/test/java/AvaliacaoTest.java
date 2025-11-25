@@ -1,4 +1,5 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
+import jdk.jshell.execution.Util;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -201,7 +202,7 @@ public class AvaliacaoTest {
 
             int percentualTotal = manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas();
 
-            String textoPercentualTotal = manageCoursePage.obterTextoDoTotalDaNotaFinal();
+            String textoPercentualTotal = manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal();
 
             assertEquals("Total: " + percentualTotal + "% da nota final", textoPercentualTotal);
         } catch (Exception e) {
@@ -237,7 +238,7 @@ public class AvaliacaoTest {
                     )
             );
 
-            String textoPercentualTotal = manageCoursePage.obterTextoDoTotalDaNotaFinal();
+            String textoPercentualTotal = manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal();
             assertEquals("Total: 0% da nota final", textoPercentualTotal);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -270,7 +271,7 @@ public class AvaliacaoTest {
 
             assertTrue(manageCoursePage.verificarSeMensagemAvaliacaoCadastradaComSucessoApareceu());
 
-            String textoPercentualTotal = manageCoursePage.obterTextoDoTotalDaNotaFinal();
+            String textoPercentualTotal = manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal();
 
             int percentualAposAdicao = manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas();
 
@@ -322,7 +323,7 @@ public class AvaliacaoTest {
             assertEquals("Preencha este campo.", capturarMensagemPadraoDeCampoVazioDoInput(inputNome));
             assertFalse(verificarValidadeDoInput(inputNome));
 
-            assertEquals("Total: 80% da nota final", manageCoursePage.obterTextoDoTotalDaNotaFinal());
+            assertEquals("Total: 80% da nota final", manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
 
             manageCoursePage.irAteSecaoAvaliacoesCadastradas();
             assertThrows(TimeoutException.class, () -> {
@@ -359,7 +360,7 @@ public class AvaliacaoTest {
             assertEquals("Preencha este campo.", capturarMensagemPadraoDeCampoVazioDoInput(inputNota));
             assertFalse(verificarValidadeDoInput(inputNota));
 
-            assertEquals("Total: 80% da nota final", manageCoursePage.obterTextoDoTotalDaNotaFinal());
+            assertEquals("Total: 80% da nota final", manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
 
             manageCoursePage.irAteSecaoAvaliacoesCadastradas();
             assertThrows(TimeoutException.class, () -> {
@@ -403,7 +404,7 @@ public class AvaliacaoTest {
 
             assertTrue(manageCoursePage.verificarSeMensagemAvaliacaoCadastradaComSucessoApareceu());
 
-            String textoPercentualTotal = manageCoursePage.obterTextoDoTotalDaNotaFinal();
+            String textoPercentualTotal = manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal();
 
             int percentualAposAdicao = manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas();
 
@@ -466,7 +467,7 @@ public class AvaliacaoTest {
                     capturarMensagemPadraoDeCampoVazioDoInput(inputNota));
             assertFalse(verificarValidadeDoInput(inputNota));
 
-            assertEquals("Total: 80% da nota final", manageCoursePage.obterTextoDoTotalDaNotaFinal());
+            assertEquals("Total: 80% da nota final", manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
 
             manageCoursePage.irAteSecaoAvaliacoesCadastradas();
             assertThrows(TimeoutException.class, () -> {
@@ -476,6 +477,519 @@ public class AvaliacaoTest {
             System.out.println(e.getMessage());
         }
     }
+
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 25/11/2025
+     *
+     */
+    @Test
+    @DisplayName("Editar nome e nota da avaliação")
+    void CT23() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            Utilitarios.scrollarTela(js, "200");
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+
+            assertEquals("ADICIONAR AVALIAÇÃO", manageCoursePage.obterBotaoAdicionarAvaliacao().getText());
+
+            manageCoursePage.clicarBotaoDeEditarAvaliacao(trAvaliacao);
+            Thread.sleep(2000);
+            Utilitarios.scrollarTela(js, "-300");
+
+            WebElement inputNome = manageCoursePage.obterInputDeNomeDaAvaliacao();
+            assertEquals("Avaliação para Editar", inputNome.getAttribute("value"));
+
+            WebElement inputNota = manageCoursePage.obterInputDeNotaDaAvaliacao();
+            assertEquals("10", inputNota.getAttribute("value"));
+
+            inputNome.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+            inputNota.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+
+            inputNome.sendKeys("Avaliação Editada");
+            inputNota.sendKeys("20");
+
+            WebElement btnAtualizarAvaliacao = manageCoursePage.obterBotaoAtualizarAvaliacao();
+            assertEquals("ATUALIZAR AVALIAÇÃO", btnAtualizarAvaliacao.getText());
+            btnAtualizarAvaliacao.click();
+
+            trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação Editada");
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+
+            assertEquals("Avaliação Editada", elementosDentroDoTrAvaliacao.getFirst().getText());
+
+            assertEquals("20%", elementosDentroDoTrAvaliacao.get(1).getText());
+
+            assertEquals(90, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+            assertEquals("Total: 90% da nota final", manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
+
+        } catch (Exception e) {
+            System.err.println("Erro no CT23: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 25/11/2025
+     *
+     */
+    @Test
+    @DisplayName("Editar somente o nome da avaliação")
+    void CT23_1() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            Utilitarios.scrollarTela(js, "200");
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+
+            assertEquals("ADICIONAR AVALIAÇÃO", manageCoursePage.obterBotaoAdicionarAvaliacao().getText());
+
+            manageCoursePage.clicarBotaoDeEditarAvaliacao(trAvaliacao);
+            Thread.sleep(2000);
+            Utilitarios.scrollarTela(js, "-300");
+
+            WebElement inputNome = manageCoursePage.obterInputDeNomeDaAvaliacao();
+            assertEquals("Avaliação para Editar", inputNome.getAttribute("value"));
+
+            WebElement inputNota = manageCoursePage.obterInputDeNotaDaAvaliacao();
+            assertEquals("10", inputNota.getAttribute("value"));
+
+            inputNome.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+
+            inputNome.sendKeys("Avaliação Renomeada");
+
+            WebElement btnAtualizarAvaliacao = manageCoursePage.obterBotaoAtualizarAvaliacao();
+            assertEquals("ATUALIZAR AVALIAÇÃO", btnAtualizarAvaliacao.getText());
+            btnAtualizarAvaliacao.click();
+
+            trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação Renomeada");
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+
+            assertEquals("Avaliação Renomeada", elementosDentroDoTrAvaliacao.getFirst().getText());
+
+            assertEquals("10%", elementosDentroDoTrAvaliacao.get(1).getText());
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+            assertEquals("Total: 80% da nota final", manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
+
+        } catch (Exception e) {
+            System.err.println("Erro no CT23.1: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 25/11/2025
+     *
+     */
+    @Test
+    @DisplayName("Editar somente a nota da avaliação")
+    void CT23_2() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            Utilitarios.scrollarTela(js, "200");
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+
+            assertEquals("ADICIONAR AVALIAÇÃO", manageCoursePage.obterBotaoAdicionarAvaliacao().getText());
+
+            manageCoursePage.clicarBotaoDeEditarAvaliacao(trAvaliacao);
+            Thread.sleep(2000);
+            Utilitarios.scrollarTela(js, "-300");
+
+            WebElement inputNome = manageCoursePage.obterInputDeNomeDaAvaliacao();
+            assertEquals("Avaliação para Editar", inputNome.getAttribute("value"));
+
+            WebElement inputNota = manageCoursePage.obterInputDeNotaDaAvaliacao();
+            assertEquals("10", inputNota.getAttribute("value"));
+
+            inputNota.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+            inputNota.sendKeys("20");
+
+            WebElement btnAtualizarAvaliacao = manageCoursePage.obterBotaoAtualizarAvaliacao();
+            assertEquals("ATUALIZAR AVALIAÇÃO", btnAtualizarAvaliacao.getText());
+            btnAtualizarAvaliacao.click();
+
+            trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+
+            assertEquals("Avaliação para Editar", elementosDentroDoTrAvaliacao.getFirst().getText());
+
+            assertEquals("20%", elementosDentroDoTrAvaliacao.get(1).getText());
+
+            assertEquals(90, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+            assertEquals("Total: 90% da nota final", manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
+
+        } catch (Exception e) {
+            System.err.println("Erro no CT23.2: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 25/11/2025
+     *
+     */
+    @Test
+    @DisplayName("Clicar em Editar e Cancelar")
+    void CT23_3() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            Utilitarios.scrollarTela(js, "200");
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+
+            assertEquals("ADICIONAR AVALIAÇÃO", manageCoursePage.obterBotaoAdicionarAvaliacao().getText());
+
+            manageCoursePage.clicarBotaoDeEditarAvaliacao(trAvaliacao);
+            Thread.sleep(2000);
+            Utilitarios.scrollarTela(js, "-300");
+
+            WebElement inputNome = manageCoursePage.obterInputDeNomeDaAvaliacao();
+            assertEquals("Avaliação para Editar", inputNome.getAttribute("value"));
+
+            WebElement inputNota = manageCoursePage.obterInputDeNotaDaAvaliacao();
+            assertEquals("10", inputNota.getAttribute("value"));
+
+            inputNota.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+            inputNota.sendKeys("99");
+
+            WebElement btnCancelar = manageCoursePage.obterBotaoCancelarAtualizacaoDaAvaliacao();
+            assertEquals("CANCELAR", btnCancelar.getText());
+            btnCancelar.click();
+
+            trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+
+            assertEquals("Avaliação para Editar", elementosDentroDoTrAvaliacao.getFirst().getText());
+
+            assertEquals("10%", elementosDentroDoTrAvaliacao.get(1).getText());
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+            assertEquals("Total: 80% da nota final", manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
+
+        } catch (Exception e) {
+            System.err.println("Erro no CT23.3: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 25/11/2025
+     *
+     */
+    @Test
+    @DisplayName("Verificar se sistema bloqueia notas negativas ou acima de 100 ao editar avaliação")
+    void CT23_4() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            Utilitarios.scrollarTela(js, "200");
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+
+            assertEquals("ADICIONAR AVALIAÇÃO", manageCoursePage.obterBotaoAdicionarAvaliacao().getText());
+
+            manageCoursePage.clicarBotaoDeEditarAvaliacao(trAvaliacao);
+            Thread.sleep(2000);
+            Utilitarios.scrollarTela(js, "-300");
+
+            WebElement inputNome = manageCoursePage.obterInputDeNomeDaAvaliacao();
+            assertEquals("Avaliação para Editar", inputNome.getAttribute("value"));
+
+            WebElement inputNota = manageCoursePage.obterInputDeNotaDaAvaliacao();
+            assertEquals("10", inputNota.getAttribute("value"));
+
+            WebElement btnAtualizarAvaliacao = manageCoursePage.obterBotaoAtualizarAvaliacao();
+            assertEquals("ATUALIZAR AVALIAÇÃO", btnAtualizarAvaliacao.getText());
+
+            inputNota.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+
+            inputNota.sendKeys("-20");
+            btnAtualizarAvaliacao.click();
+
+            assertEquals("O valor deve ser maior ou igual a 1.", capturarMensagemPadraoDeCampoVazioDoInput(inputNota));
+            assertFalse(verificarValidadeDoInput(inputNota));
+
+            Thread.sleep(2000);
+            inputNota.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+            Thread.sleep(2000);
+
+            inputNota.sendKeys("300");
+            btnAtualizarAvaliacao.click();
+
+            assertEquals("O valor deve ser menor ou igual a 100.",
+                    capturarMensagemPadraoDeCampoVazioDoInput(inputNota));
+            assertFalse(verificarValidadeDoInput(inputNota));
+
+            Thread.sleep(3000);
+            driver.navigate().refresh();
+            Thread.sleep(1000);
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+
+            trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+
+            assertEquals("Avaliação para Editar", elementosDentroDoTrAvaliacao.getFirst().getText());
+
+            assertEquals("10%", elementosDentroDoTrAvaliacao.get(1).getText());
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+        } catch (Exception e) {
+            System.err.println("Erro no CT23.4: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 25/11/2025
+     *
+     */
+    @Test
+    @DisplayName("Verificar se mensagem é exibida quando percentual total das avaliações passa de 100% ao editar avaliação")
+    void CT23_5() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            Utilitarios.scrollarTela(js, "200");
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            int percentualTotalAntesDaAdicao = manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas();
+
+            assertEquals(80, percentualTotalAntesDaAdicao);
+
+            assertEquals("ADICIONAR AVALIAÇÃO", manageCoursePage.obterBotaoAdicionarAvaliacao().getText());
+
+            manageCoursePage.clicarBotaoDeEditarAvaliacao(trAvaliacao);
+            Thread.sleep(2000);
+            Utilitarios.scrollarTela(js, "-300");
+
+            WebElement inputNome = manageCoursePage.obterInputDeNomeDaAvaliacao();
+            assertEquals("Avaliação para Editar", inputNome.getAttribute("value"));
+
+            WebElement inputNota = manageCoursePage.obterInputDeNotaDaAvaliacao();
+            assertEquals("10", inputNota.getAttribute("value"));
+
+            inputNota.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+            inputNota.sendKeys("40");
+
+            WebElement btnAtualizarAvaliacao = manageCoursePage.obterBotaoAtualizarAvaliacao();
+            assertEquals("ATUALIZAR AVALIAÇÃO", btnAtualizarAvaliacao.getText());
+            btnAtualizarAvaliacao.click();
+
+            String alertaSomaPercentualAcimaDe100 = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.xpath("//div[contains(text(), 'Atenção: O total dos')]")
+            )).getText();
+
+            assertEquals("Atenção: O total dos percentuais (" + (percentualTotalAntesDaAdicao + 30) + "%) excede 100%" +
+                    ".", alertaSomaPercentualAcimaDe100);
+
+            trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+
+            assertEquals("Avaliação para Editar", elementosDentroDoTrAvaliacao.getFirst().getText());
+
+            assertEquals("40%", elementosDentroDoTrAvaliacao.get(1).getText());
+
+            assertEquals(110, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+            assertEquals("Total: 110% da nota final", manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
+
+        } catch (Exception e) {
+            System.err.println("Erro no CT23.5: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 25/11/2025
+     *
+     */
+    @Test
+    @DisplayName("Sistema bloqueia tentativa de salvar a edição de uma avaliação com nome vazio")
+    void CT23_6() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            Utilitarios.scrollarTela(js, "200");
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+
+            assertEquals("ADICIONAR AVALIAÇÃO", manageCoursePage.obterBotaoAdicionarAvaliacao().getText());
+
+            manageCoursePage.clicarBotaoDeEditarAvaliacao(trAvaliacao);
+            Thread.sleep(2000);
+            Utilitarios.scrollarTela(js, "-300");
+
+            WebElement inputNome = manageCoursePage.obterInputDeNomeDaAvaliacao();
+            assertEquals("Avaliação para Editar", inputNome.getAttribute("value"));
+
+            WebElement inputNota = manageCoursePage.obterInputDeNotaDaAvaliacao();
+            assertEquals("10", inputNota.getAttribute("value"));
+
+            inputNome.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+
+            inputNome.sendKeys("");
+
+            WebElement btnAtualizarAvaliacao = manageCoursePage.obterBotaoAtualizarAvaliacao();
+            assertEquals("ATUALIZAR AVALIAÇÃO", btnAtualizarAvaliacao.getText());
+            btnAtualizarAvaliacao.click();
+
+            assertEquals("Preencha este campo.", capturarMensagemPadraoDeCampoVazioDoInput(inputNome));
+            assertFalse(verificarValidadeDoInput(inputNome));
+
+            Thread.sleep(5000);
+            driver.navigate().refresh();
+            Thread.sleep(4000);
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+
+            trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+
+            assertEquals("Avaliação para Editar", elementosDentroDoTrAvaliacao.getFirst().getText());
+
+            assertEquals("10%", elementosDentroDoTrAvaliacao.get(1).getText());
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+            assertEquals("Total: 80% da nota final", manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
+
+        } catch (Exception e) {
+            System.err.println("Erro no CT23.6: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Autor: Iuri da Silva Fernandes<br>
+     * Resultado: <strong>Passou</strong><br>
+     * Data de execução: 25/11/2025
+     *
+     */
+    @Test
+    @DisplayName("Sistema bloqueia tentativa de salvar a edição de uma avaliação com nota vazia")
+    void CT23_7() {
+        try {
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+            Utilitarios.scrollarTela(js, "200");
+
+            WebElement trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+
+            assertEquals("ADICIONAR AVALIAÇÃO", manageCoursePage.obterBotaoAdicionarAvaliacao().getText());
+
+            manageCoursePage.clicarBotaoDeEditarAvaliacao(trAvaliacao);
+            Thread.sleep(2000);
+            Utilitarios.scrollarTela(js, "-300");
+
+            WebElement inputNome = manageCoursePage.obterInputDeNomeDaAvaliacao();
+            assertEquals("Avaliação para Editar", inputNome.getAttribute("value"));
+
+            WebElement inputNota = manageCoursePage.obterInputDeNotaDaAvaliacao();
+            assertEquals("10", inputNota.getAttribute("value"));
+
+            inputNota.sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+            inputNota.sendKeys("");
+
+            WebElement btnAtualizarAvaliacao = manageCoursePage.obterBotaoAtualizarAvaliacao();
+            assertEquals("ATUALIZAR AVALIAÇÃO", btnAtualizarAvaliacao.getText());
+            btnAtualizarAvaliacao.click();
+
+            assertEquals("Preencha este campo.", capturarMensagemPadraoDeCampoVazioDoInput(inputNota));
+            assertFalse(verificarValidadeDoInput(inputNota));
+
+            Thread.sleep(5000);
+            driver.navigate().refresh();
+            Thread.sleep(4000);
+            manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
+
+            trAvaliacao = manageCoursePage.localizarLinhaDaAvaliacaoPorNome("Avaliação para Editar");
+            Utilitarios.centralizarElementoNaTela(trAvaliacao, driver);
+
+            List<WebElement> elementosDentroDoTrAvaliacao = trAvaliacao.findElements(By.tagName("td"));
+
+            assertEquals("Avaliação para Editar", elementosDentroDoTrAvaliacao.getFirst().getText());
+
+            assertEquals("10%", elementosDentroDoTrAvaliacao.get(1).getText());
+
+            assertEquals(80, manageCoursePage.obterSomaDoPercentualDeTodasAsAvaliacoesCadastradas());
+            assertEquals("Total: 80% da nota final", manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal());
+
+        } catch (Exception e) {
+            System.err.println("Erro no CT23.7: " + e.getMessage());
+        }
+    }
+
 
     private boolean verificarValidadeDoInput(WebElement input) {
         Boolean valido = (Boolean) js.executeScript("return arguments[0].checkValidity()", input);
