@@ -8,13 +8,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.DashboardPage;
 import pages.ManageCoursePage;
 import utils.Authentication;
-import java.time.Duration;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EditCourseTest {
     WebDriver driver;

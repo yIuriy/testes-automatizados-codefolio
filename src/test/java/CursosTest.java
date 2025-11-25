@@ -12,7 +12,7 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class Cursostest { 
+public class CursosTest {
 
     WebDriver driver;
     Authentication authentication;
