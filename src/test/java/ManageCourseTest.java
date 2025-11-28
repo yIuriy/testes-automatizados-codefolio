@@ -46,7 +46,7 @@ public class ManageCourseTest {
     void CT17() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             manageCoursePage.inserirTextoNoFiltrar("Iuri");
@@ -66,7 +66,7 @@ public class ManageCourseTest {
             assertTrue(manageCoursePage.verificarSeExisteIconeDeDeletarAluno(elementosDentroDoTrAluno), "Verifica se " +
                     "existe o ícone de deletar na linha do Aluno em questão");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT17: " + e.getMessage());
         }
     }
 
@@ -79,7 +79,7 @@ public class ManageCourseTest {
     void CT17_1() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             manageCoursePage.inserirTextoNoFiltrar("Iuri");
@@ -116,7 +116,7 @@ public class ManageCourseTest {
                     "existe o ícone de deletar na linha do Aluno em questão");
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT17.1: " + e.getMessage());
         }
     }
 
@@ -129,7 +129,7 @@ public class ManageCourseTest {
     void VT17_2() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso sem Alunos");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             js.executeScript("window.scrollBy({top: 500})");
@@ -145,7 +145,7 @@ public class ManageCourseTest {
             assertEquals("Nenhum estudante matriculado neste curso.", msgNenhumAlunoMatriculado);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT17.2: " + e.getMessage());
         }
     }
 
@@ -158,7 +158,7 @@ public class ManageCourseTest {
     void CT17_3() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
 
@@ -175,7 +175,7 @@ public class ManageCourseTest {
             assertEquals(alunosExibidosNoMomento, linhasDosAlunos.size());
             assertEquals(totalDeAlunosExistentes, linhasDosAlunos.size());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT17.3: " + e.getMessage());
         }
     }
 
@@ -190,12 +190,6 @@ public class ManageCourseTest {
         );
     }
 
-    private void irAteAPaginaDeGerenciarCursos() {
-        dashboardPage.abrirMenuDeOpcoesPerfil();
-        dashboardPage.abrirMenuGerenciamentoDeCursos();
-        wait.until(ExpectedConditions.urlContains("/manage-courses"));
-    }
-
     /**
      * Autor: Iuri da Silva Fernandes<br>
      * Resultado: <strong>Falhou</strong>
@@ -207,7 +201,7 @@ public class ManageCourseTest {
         try {
             Thread.sleep(5000);
             String nomeDoAluno = "Zildo Tester Java";
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             js.executeScript("window.scrollBy({top: 500})");
@@ -228,7 +222,7 @@ public class ManageCourseTest {
             });
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT18: " + e.getMessage());
         }
     }
 
@@ -243,7 +237,7 @@ public class ManageCourseTest {
         try {
             Thread.sleep(5000);
             String nomeDoAluno = "Zildo Tester Java";
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             js.executeScript("window.scrollBy({top: 500})");
@@ -262,7 +256,7 @@ public class ManageCourseTest {
 
             assertNotNull(trAlunoAposCancelamentoExclusao);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT18.1: " + e.getMessage());
         }
     }
 
@@ -277,7 +271,7 @@ public class ManageCourseTest {
         try {
             Thread.sleep(5000);
             String nomeDoAluno = "Zildo Tester Java";
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Deletar Alunos");
             manageCoursePage.localizarEClicarNoMenuPorNome("Alunos");
             js.executeScript("window.scrollBy({top: 500})");
@@ -289,7 +283,7 @@ public class ManageCourseTest {
             assertEquals("Tem certeza que deseja remover Zildo Tester Java do curso?", textoExibido);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT18.2: " + e.getMessage());
         }
     }
 
@@ -297,7 +291,7 @@ public class ManageCourseTest {
     void CT25() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
 
             WebElement abaAvaliacoes = wait.until(
@@ -331,7 +325,7 @@ public class ManageCourseTest {
     void CT25_1() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
 
             WebElement abaAvaliacoes = wait.until(
@@ -369,7 +363,7 @@ public class ManageCourseTest {
     void CT25_2_naoPermitirCampoNotaVazio() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoDoPrimeiroCurso();
 
             WebElement abaAvaliacoes = wait.until(

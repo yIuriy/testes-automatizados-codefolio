@@ -215,6 +215,7 @@ public class ManageCoursePage {
     /**
      * Verifica se existe o ícone de deletar no elementos dentro do tr do aluno.
      *
+     * @param elementos os elementos dentro "th" e "td" dentro do trAluno
      * @return true se existe; false caso contrário
      *
      */
@@ -285,12 +286,26 @@ public class ManageCoursePage {
         Utilitarios.centralizarElementoNaTela(tituloSecao, driver);
     }
 
+    /**
+     * Obtém o input para inserir o nome de uma avaliação.<br>
+     * Pode ser utilizada para a criação ou edição de uma avaliação.
+     *
+     * @return o input de nome da avaliação
+     *
+     */
     public WebElement obterInputDeNomeDaAvaliacao() {
         return wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//input[contains(@placeholder, 'Ex: T1, A1, Projeto Final')]")
         ));
     }
 
+    /**
+     * Obtém o input para inserir a nome de uma avaliação.
+     * Pode ser utilizada para a criação ou edição de uma avaliação.
+     *
+     * @return o input de nota da avaliação
+     *
+     */
     public WebElement obterInputDeNotaDaAvaliacao() {
         String idInputNota = wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//label[contains(text(), 'Percentual na Nota Final')]")
@@ -301,18 +316,36 @@ public class ManageCoursePage {
         ));
     }
 
+    /**
+     * Obtém o botão para salvar a criação de uma nova avaliação.
+     *
+     * @return o botão de salvar a criação de uma avaliação
+     *
+     */
     public WebElement obterBotaoAdicionarAvaliacao() {
         return wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(text(), 'Adicionar Avaliação')]")
         ));
     }
 
+    /**
+     * Obtém o botão para salvar a edição de uma avaliação.
+     *
+     * @return o botão de salvar a edição de uma avaliação
+     *
+     */
     public WebElement obterBotaoAtualizarAvaliacao() {
         return wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(text(), 'Atualizar Avaliação')]")
         ));
     }
 
+    /**
+     * Obtém o botão para cancelar a edição de uma avaliação.
+     *
+     * @return o botão de cancelar a edição de uma avaliação
+     *
+     */
     public WebElement obterBotaoCancelarAtualizacaoDaAvaliacao() {
         return wait.until(ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//button[contains(text(), 'Cancelar')]")
@@ -390,14 +423,20 @@ public class ManageCoursePage {
     }
 
     /**
-     * Obtém o aria-label do svg que exibe se uma nota digitada é válida ou não.
+     * Obtém o aria-label do svg que exibe se uma nota digitada é válida ou não. <br>
+     * São valores possíveis:
+     * <ul>
+     *      <li> Nota salva com sucesso
+     *      <li> Nota inválida
+     *      <li> null(caso o aluno não tenha nota atribuída)
+     * <ul/>
      *
-     * @param trAlunoSemNotaAtribuida a tr do aluno sem nota atribuída
+     * @param trAluno a tr do aluno sem nota atribuída
      * @return o valor dentro do aria-label do svg
      *
      */
-    public String obterValorDoSvgDeConfirmacaoSeNotaFoiSalvaCorretamente(WebElement trAlunoSemNotaAtribuida) {
-        WebElement tr = trAlunoSemNotaAtribuida.findElements(By.tagName("td")).get(2);
+    public String obterValorDoSvgDeEstadoDaNota(WebElement trAluno) {
+        WebElement tr = trAluno.findElements(By.tagName("td")).get(2);
         String svg = tr.findElements(By.tagName("svg")).getFirst().getAttribute("aria-label");
         assertNotNull(svg);
         return svg;
@@ -424,6 +463,12 @@ public class ManageCoursePage {
         return somaTotal;
     }
 
+    /**
+     * Verifica se a mensagem de "Avaliação criada com sucesso" apareceu.
+     *
+     * @return true caso ela tenha aparecido; false caso contrário
+     *
+     */
     public boolean verificarSeMensagemAvaliacaoCadastradaComSucessoApareceu() {
         try {
             wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -435,6 +480,19 @@ public class ManageCoursePage {
         }
     }
 
+    /**
+     * Obtém os botões de ação da avaliação. <br>
+     * Com base no índice:
+     * <ul>
+     *  <li> 0 - Botão de edição
+     *  <li> 1 - Botão de exclusão
+     *  <li> 2 - Botão de atribuir nota
+     * <ul/>
+     *
+     * @param trAvaliacao o tr da avaliação
+     * @return uma lista com os botões
+     *
+     */
     private List<WebElement> obterBotoesDeAcaoDaAvaliacao(WebElement trAvaliacao) {
         List<WebElement> botoesDeAcao = trAvaliacao.findElements(By.tagName("button"));
         assertNotNull(botoesDeAcao);
@@ -442,10 +500,26 @@ public class ManageCoursePage {
         return botoesDeAcao;
     }
 
+    /**
+     * Clica no botão de editar da avaliação passada. <br>
+     * Utiliza {@link #obterBotoesDeAcaoDaAvaliacao(WebElement)} para obter o botão desejado.
+     *
+     * @param trAvaliacao o tr da avaliação
+     * @see ManageCoursePage#obterBotoesDeAcaoDaAvaliacao(WebElement)
+     *
+     */
     public void clicarBotaoDeEditarAvaliacao(WebElement trAvaliacao) {
         obterBotoesDeAcaoDaAvaliacao(trAvaliacao).getFirst().click();
     }
 
+    /**
+     * Clica no botão de excluir da avaliação passada. <br>
+     * Utiliza {@link #obterBotoesDeAcaoDaAvaliacao(WebElement)} para obter o botão desejado.
+     *
+     * @param trAvaliacao o tr da avaliação
+     * @see ManageCoursePage#obterBotoesDeAcaoDaAvaliacao(WebElement)
+     *
+     */
     public void clicarBotaoDeExcluirAvaliacao(WebElement trAvaliacao) {
         obterBotoesDeAcaoDaAvaliacao(trAvaliacao).get(1).click();
     }
@@ -485,22 +559,43 @@ public class ManageCoursePage {
         divContainerFiltroAtivo.findElement(By.tagName("svg")).click();
     }
 
-    public WebElement obterRoleAluno(WebElement trAluno) {
-        List<WebElement> elementosDentroDoTrAluno = trAluno.findElements(By.cssSelector("th, td"));
-        return elementosDentroDoTrAluno.get(4);
+    /**
+     * Obtém o elemento que armazena o role do tr passado.
+     *
+     * @param trPessoa o tr da pessoa
+     * @return o elemento que armazena o role da pessoa
+     *
+     */
+    public WebElement obterRole(WebElement trPessoa) {
+        List<WebElement> elementosDentroDoTrPessoa = trPessoa.findElements(By.cssSelector("th, td"));
+        return elementosDentroDoTrPessoa.get(4);
     }
 
-    public String obterValorRoleAluno(WebElement trAluno) {
-        return obterRoleAluno(trAluno).getText();
+    /**
+     * Obtém o role do aluno passado. <br>
+     * Utiliza {@link #obterRole(WebElement)} para obter o elemento que armazena o role da pessoa.
+     *
+     * @param trPessoa o tr da pessoa
+     * @return o role da pessoa
+     *
+     */
+    public String obterValorRole(WebElement trPessoa) {
+        return obterRole(trPessoa).getText();
     }
 
-    public void alterarRoleDoAluno(WebElement trAluno, String novoRole) {
-        obterRoleAluno(trAluno).click();
+    /**
+     * Altera o role da pessoa com base no tr passado. <br>
+     * Utiliza {@link #obterRole(WebElement)} para obter o elemento que armazena o role da pessoa.
+     *
+     * @param trPessoa o tr da pessoa
+     * @param novoRole o novo role
+     *
+     */
+    public void alterarRole(WebElement trPessoa, String novoRole) {
+        obterRole(trPessoa).click();
         Objects.requireNonNull(wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//li[contains(text(), '" + novoRole + "')]")
         ))).click();
     }
-
-
 }
 

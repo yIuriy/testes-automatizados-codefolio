@@ -61,7 +61,7 @@ public class FiltrarAlunoTest {
                 assertEquals("0%", td.getText());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20: " + e.getMessage());
         }
     }
 
@@ -90,7 +90,7 @@ public class FiltrarAlunoTest {
                 assertEquals("100%", td.getText());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.1: " + e.getMessage());
         }
     }
 
@@ -124,7 +124,7 @@ public class FiltrarAlunoTest {
                     div.findElement(By.tagName("button")).getText());
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.2: " + e.getMessage());
         }
     }
 
@@ -153,7 +153,7 @@ public class FiltrarAlunoTest {
                 assertEquals("Estudante", td.getText());
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.3: " + e.getMessage());
         }
     }
 
@@ -175,7 +175,7 @@ public class FiltrarAlunoTest {
 
             manageCoursePage.filtrarAlunosPorRole("Admin");
 
-
+            // Só deve conter admins
             assertDoesNotThrow(() -> {
                 WebElement trAlunos = manageCoursePage.obterTableBodyDosAlunosExibidos();
 
@@ -186,7 +186,7 @@ public class FiltrarAlunoTest {
             });
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.4: " + e.getMessage());
         }
     }
 
@@ -219,7 +219,7 @@ public class FiltrarAlunoTest {
                     div.findElement(By.tagName("button")).getText());
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.5: " + e.getMessage());
         }
     }
 
@@ -250,7 +250,7 @@ public class FiltrarAlunoTest {
             assertEquals("Amanda Dias De Souza", nomePrimeiroAluno);
             assertEquals("Zildo Tester Java", nomeUltimoAluno);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.6: " + e.getMessage());
         }
     }
 
@@ -281,7 +281,7 @@ public class FiltrarAlunoTest {
             assertEquals("Zildo Tester Java", nomePrimeiroAluno);
             assertEquals("Amanda Dias De Souza", nomeUltimoAluno);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.7: " + e.getMessage());
         }
     }
 
@@ -314,7 +314,7 @@ public class FiltrarAlunoTest {
             assertEquals("zildotesterjava@gmail.com",
                     trAlunos.getFirst().findElement(By.tagName("td")).getText());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.8: " + e.getMessage());
         }
     }
 
@@ -347,7 +347,7 @@ public class FiltrarAlunoTest {
             assertEquals("Gabriel Dutra Martinez",
                     trAlunos.getLast().findElement(By.tagName("th")).getText());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.9: " + e.getMessage());
         }
     }
 
@@ -380,7 +380,7 @@ public class FiltrarAlunoTest {
                     div.findElement(By.tagName("button")).getText());
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.10: " + e.getMessage());
         }
     }
 
@@ -413,7 +413,7 @@ public class FiltrarAlunoTest {
             assertEquals("zildotesterjava@gmail.com",
                     trAlunos.getFirst().findElement(By.tagName("td")).getText());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.11: " + e.getMessage());
         }
     }
 
@@ -446,7 +446,7 @@ public class FiltrarAlunoTest {
                     div.findElement(By.tagName("button")).getText());
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.12: " + e.getMessage());
         }
     }
 
@@ -484,7 +484,7 @@ public class FiltrarAlunoTest {
 
             assertEquals("Exibindo 26 de 26 estudantes", p.getText());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.13: " + e.getMessage());
         }
     }
 
@@ -524,7 +524,7 @@ public class FiltrarAlunoTest {
 
             assertEquals("Exibindo 26 de 26 estudantes", p.getText());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT20.14: " + e.getMessage());
         }
     }
 }

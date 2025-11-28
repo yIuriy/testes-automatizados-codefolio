@@ -37,7 +37,7 @@ public class QuizCourseTest {
     void CT014(){
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Grupo 01");
             manageCoursePage.localizarEClicarNoMenuPorNome("Quiz");
             quizPage.clicarBotaoQuizVideo();
@@ -51,11 +51,5 @@ public class QuizCourseTest {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    private void irAteAPaginaDeGerenciarCursos() {
-        dashboardPage.abrirMenuDeOpcoesPerfil();
-        dashboardPage.abrirMenuGerenciamentoDeCursos();
-        wait.until(ExpectedConditions.urlContains("/manage-courses"));
     }
 }

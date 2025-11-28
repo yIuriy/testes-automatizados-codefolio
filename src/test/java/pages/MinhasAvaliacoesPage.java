@@ -21,7 +21,6 @@ public class MinhasAvaliacoesPage {
     private final WebDriverWait wait;
     private final JavascriptExecutor js;
 
-
     public MinhasAvaliacoesPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -137,5 +136,4 @@ public class MinhasAvaliacoesPage {
                 By.xpath(".//div[contains(@class,'MuiChip-root')]//span")
         ).getText();
     }
-
 }

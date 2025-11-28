@@ -42,7 +42,7 @@ public class AvaliacaoTest {
     /**
      * Autor: Iuri da Silva Fernandes<br>
      * Resultado: <strong>Passou</strong><br>
-     * Data de execução: 11/11/2025
+     * Data de execução: 28/11/2025
      *
      */
     @Test
@@ -50,7 +50,7 @@ public class AvaliacaoTest {
     void CT19() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
 
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
@@ -67,18 +67,21 @@ public class AvaliacaoTest {
 
             WebElement inputDeNota = manageCoursePage.localizarInputDeNota(trAluno);
             String notaDoAluno = manageCoursePage.obterNotaDoAluno(inputDeNota);
+            String ariaLabelNotaSalvaComSucesso =
+                    manageCoursePage.obterValorDoSvgDeEstadoDaNota(trAluno);
 
             assertEquals("10", notaDoAluno);
+            assertEquals("Nota salva com sucesso", ariaLabelNotaSalvaComSucesso);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT19: " + e.getMessage());
         }
     }
 
     /**
      * Autor: Iuri da Silva Fernandes<br>
      * Resultado: <strong>Passou</strong><br>
-     * Data de execução: 11/11/2025
+     * Data de execução: 28/11/2025
      *
      */
     @Test
@@ -86,7 +89,7 @@ public class AvaliacaoTest {
     void CT19_1() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
 
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
@@ -103,18 +106,24 @@ public class AvaliacaoTest {
 
             WebElement inputDeNota1 = manageCoursePage.localizarInputDeNota(trAluno1);
             String notaDoAluno1 = manageCoursePage.obterNotaDoAluno(inputDeNota1);
+            String ariaLabelNotaSalvaComSucessoAluno1 =
+                    manageCoursePage.obterValorDoSvgDeEstadoDaNota(trAluno1);
 
             assertEquals("10", notaDoAluno1);
+            assertEquals("Nota salva com sucesso", ariaLabelNotaSalvaComSucessoAluno1);
 
             WebElement trAluno2 = manageCoursePage.localizarLinhaDoAlunoPorNome("Zildo");
             assertEquals("Zildo Tester Java", trAluno2.findElement(By.tagName("p")).getText());
 
             WebElement inputDeNota2 = manageCoursePage.localizarInputDeNota(trAluno2);
             String notaDoAluno2 = manageCoursePage.obterNotaDoAluno(inputDeNota2);
+            String ariaLabelNotaSalvaComSucessoAluno2 =
+                    manageCoursePage.obterValorDoSvgDeEstadoDaNota(trAluno1);
 
             assertEquals("10", notaDoAluno2);
+            assertEquals("Nota salva com sucesso", ariaLabelNotaSalvaComSucessoAluno2);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT19.1: " + e.getMessage());
         }
     }
 
@@ -129,7 +138,7 @@ public class AvaliacaoTest {
     void CT19_2() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
 
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
@@ -148,7 +157,7 @@ public class AvaliacaoTest {
                         manageCoursePage.localizarInputDeNota(trAluno)));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT19.2: " + e.getMessage());
         }
     }
 
@@ -163,7 +172,7 @@ public class AvaliacaoTest {
     void CT19_3() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
 
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
@@ -181,7 +190,7 @@ public class AvaliacaoTest {
             verificarSeExisteMenuDeOpcoesDaAvaliacao(elementosDentroDoTrAvaliacao);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT19.3: " + e.getMessage());
         }
     }
 
@@ -196,7 +205,7 @@ public class AvaliacaoTest {
     void CT19_4() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
 
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
@@ -208,7 +217,7 @@ public class AvaliacaoTest {
 
             assertEquals("Total: " + percentualTotal + "% da nota final", textoPercentualTotal);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT19.4: " + e.getMessage());
         }
     }
 
@@ -223,7 +232,7 @@ public class AvaliacaoTest {
     void CT19_5() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso sem Avaliações");
 
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
@@ -243,7 +252,7 @@ public class AvaliacaoTest {
             String textoPercentualTotal = manageCoursePage.obterTextoDoPercentualTotalDaNotaFinal();
             assertEquals("Total: 0% da nota final", textoPercentualTotal);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT19.5: " + e.getMessage());
         }
     }
 
@@ -258,7 +267,7 @@ public class AvaliacaoTest {
     void CT22() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -295,7 +304,7 @@ public class AvaliacaoTest {
             // Realiza os assertEquals, garantindo que todas as opções existem
             verificarSeExisteMenuDeOpcoesDaAvaliacao(elementosDentroDoTrAvaliacao);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT22: " + e.getMessage());
         }
     }
 
@@ -310,7 +319,7 @@ public class AvaliacaoTest {
     void CT22_1() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -332,7 +341,7 @@ public class AvaliacaoTest {
                 manageCoursePage.localizarLinhaDaAvaliacaoPorNome("A2");
             });
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT22.1: " + e.getMessage());
         }
     }
 
@@ -347,7 +356,7 @@ public class AvaliacaoTest {
     void CT22_2() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -369,7 +378,7 @@ public class AvaliacaoTest {
                 manageCoursePage.localizarLinhaDaAvaliacaoPorNome("A2");
             });
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT22.2: " + e.getMessage());
         }
     }
 
@@ -384,7 +393,7 @@ public class AvaliacaoTest {
     void CT22_3() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -428,7 +437,7 @@ public class AvaliacaoTest {
             // Realiza os assertEquals, garantindo que todas as opções existem
             verificarSeExisteMenuDeOpcoesDaAvaliacao(elementosDentroDoTrAvaliacao);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT22.3: " + e.getMessage());
         }
     }
 
@@ -443,7 +452,7 @@ public class AvaliacaoTest {
     void CT22_4() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -476,7 +485,7 @@ public class AvaliacaoTest {
                 manageCoursePage.localizarLinhaDaAvaliacaoPorNome("A2");
             });
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println("Erro no CT22.4: " + e.getMessage());
         }
     }
 
@@ -491,7 +500,7 @@ public class AvaliacaoTest {
     void CT23() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -552,7 +561,7 @@ public class AvaliacaoTest {
     void CT23_1() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -611,7 +620,7 @@ public class AvaliacaoTest {
     void CT23_2() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -669,7 +678,7 @@ public class AvaliacaoTest {
     void CT23_3() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -727,7 +736,7 @@ public class AvaliacaoTest {
     void CT23_4() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -803,7 +812,7 @@ public class AvaliacaoTest {
     void CT23_5() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -870,7 +879,7 @@ public class AvaliacaoTest {
     void CT23_6() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -937,7 +946,7 @@ public class AvaliacaoTest {
     void CT23_7() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Teste");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
             Utilitarios.scrollarTela(js, "200");
@@ -1042,7 +1051,7 @@ public class AvaliacaoTest {
 
             Thread.sleep(2000);
 
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Excluir Avaliação");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
 
@@ -1095,7 +1104,7 @@ public class AvaliacaoTest {
     void CT24_1() {
         try {
             Thread.sleep(5000);
-            irAteAPaginaDeGerenciarCursos();
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
             manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Curso para Excluir Avaliação");
             manageCoursePage.localizarEClicarNoMenuPorNome("Avaliações");
 
@@ -1136,7 +1145,6 @@ public class AvaliacaoTest {
         }
     }
 
-
     private boolean verificarValidadeDoInput(WebElement input) {
         Boolean valido = (Boolean) js.executeScript("return arguments[0].checkValidity()", input);
         assertNotNull(valido);
@@ -1147,12 +1155,6 @@ public class AvaliacaoTest {
         String msg = (String) js.executeScript("return arguments[0].validationMessage", input);
         assertNotNull(msg);
         return msg;
-    }
-
-    private void irAteAPaginaDeGerenciarCursos() {
-        dashboardPage.abrirMenuDeOpcoesPerfil();
-        dashboardPage.abrirMenuGerenciamentoDeCursos();
-        wait.until(ExpectedConditions.urlContains("/manage-courses"));
     }
 
     private void irAtePaginaMinhasAvaliacoes() {
