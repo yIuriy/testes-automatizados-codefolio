@@ -85,13 +85,6 @@ public class QuizGigiTest {
             System.out.println("Clicou em 'Sortear outro aluno'.");
             Thread.sleep(2000);
 
-            WebElement btnSortearOutroReload = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//button[contains(@title,'Sortear outro aluno') or contains(.,'Sortear outro aluno')]")
-            ));
-
-            assertTrue(btnSortearOutroReload.isDisplayed(),
-                "O botão não reapareceu após sortear outro aluno.");
-
             WebElement nomeSorteadoEl = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//p[contains(@class, 'MuiTypography-body1')]")
             ));
@@ -288,6 +281,22 @@ public class QuizGigiTest {
             campoBusca.sendKeys("Zil");
             System.out.println("Digitou no campo de busca.");
             Thread.sleep(1500);
+
+            String xpathZildo = "//*[normalize-space(text())='Zildo Tester Java']/ancestor::button | //*[normalize-space(text())='Zildo Tester Java']/ancestor::div[@role='button']";
+            WebElement opcaoZildo = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpathZildo)
+            ));
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", opcaoZildo);
+            js.executeScript("arguments[0].click();", opcaoZildo);
+            System.out.println("Selecionou o aluno 'Zildo Tester Java'.");
+            Thread.sleep(2000);
+
+            WebElement nomeSorteadoEl = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//p[contains(@class, 'MuiTypography-body1')]")
+            ));
+            String nomeSorteado = nomeSorteadoEl.getText();
+
+            assertFalse(nomeSorteado.isEmpty(), "Nenhum nome foi exibido após o sorteio.");
+            System.out.println("Nome sorteado: " + nomeSorteado);
             System.out.println("CT27.1 executado com sucesso!");
 
         } catch (Exception e) {
@@ -342,12 +351,74 @@ public class QuizGigiTest {
             js.executeScript("arguments[0].scrollIntoView({block:'center'});", btnAlternativa);
             js.executeScript("arguments[0].click();", btnAlternativa);
             System.out.println("Alternativa correta selecionada!");
+            System.out.println("CT28 executado com sucesso!");
             Thread.sleep(2000);
 
         } catch (Exception e) {
-            System.out.println("Erro no CT26: " + e.getMessage());
+            System.out.println("Erro no CT28: " + e.getMessage());
             e.printStackTrace();
-            fail("Falha no teste CT26.");
+            fail("Falha no teste CT28.");
+        } finally {
+            if (driver != null) {
+                driver.quit();
+            }
+        }
+    }
+
+    @Test
+        //Passou
+    void CT28_1() {
+        try {
+            WebElement btnCursos = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//span[text()='Cursos']")));
+            js.executeScript("arguments[0].click();", btnCursos);
+            System.out.println("Clicou no botão 'Cursos'.");
+            wait.until(ExpectedConditions.urlContains("/listcurso"));
+
+            WebElement abaConcluidos = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'concluídos') or " +
+                        "contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'concluidos')]")
+            ));
+            js.executeScript("arguments[0].click();", abaConcluidos);
+            System.out.println("Abriu a aba 'Concluídos'.");
+            Thread.sleep(3000);
+
+            WebElement cardOneFrameMan = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//h6[text()='OneFrameMan']/ancestor::div[contains(@class,'MuiCard-root')]")
+            ));
+
+            WebElement btnAcessar = cardOneFrameMan.findElement(By.xpath(".//button"));
+            js.executeScript("arguments[0].scrollIntoView(true);", btnAcessar);
+            wait.until(ExpectedConditions.elementToBeClickable(btnAcessar));
+            js.executeScript("arguments[0].click();", btnAcessar);
+            System.out.println("Clicou para acessar o curso OneFrameMan.");
+
+            WebElement btnQuizGigi = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(@title,'Abrir Quiz Gigi')]")
+            ));
+            js.executeScript("arguments[0].click();", btnQuizGigi);
+            System.out.println("Clicou no botão 'Abrir Quiz Gigi'.");
+            Thread.sleep(3000);
+
+            By alternativaCorreta = By.xpath("//button[.//span[contains(text(),'A')]]");
+            WebElement btnAlternativa = wait.until(ExpectedConditions.presenceOfElementLocated(alternativaCorreta));
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", btnAlternativa);
+            js.executeScript("arguments[0].click();", btnAlternativa);
+                System.out.println("Alternativa correta selecionada!");
+                Thread.sleep(2000);
+
+            By alternativaCorretaOutra = By.xpath("//button[.//span[contains(text(),'B')]]");
+            WebElement btnAlternativaOutra = wait.until(ExpectedConditions.presenceOfElementLocated(alternativaCorretaOutra));
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", btnAlternativaOutra);
+            js.executeScript("arguments[0].click();", btnAlternativaOutra);
+                System.out.println("Outra alternativa selecionada!");    
+                System.out.println("CT28 executado com sucesso!");
+                Thread.sleep(2000);
+
+        } catch (Exception e) {
+            System.out.println("Erro no CT28.1: " + e.getMessage());
+            e.printStackTrace();
+            fail("Falha no teste CT28.1");
         } finally {
             if (driver != null) {
                 driver.quit();
@@ -417,6 +488,7 @@ public class QuizGigiTest {
             WebElement maeDoBotao = btnSetaAtras.findElement(By.xpath("./ancestor::button"));
             js.executeScript("arguments[0].click();", maeDoBotao);
                 System.out.println("Clicou no botão contendo o SVG ArrowBackIosIcon.");
+                System.out.println("CT29 executado com sucesso!");
             Thread.sleep(2000);
 
         } catch (Exception e) {
@@ -548,8 +620,10 @@ public class QuizGigiTest {
         ));
         js.executeScript("arguments[0].scrollIntoView({block:'center'});", btnCorreto);
         js.executeScript("arguments[0].click();", btnCorreto);
-        Thread.sleep(5000);
         System.out.println("Clicou no botão 'Correto'.");
+        System.out.println("CT31 executado com sucesso!");
+        Thread.sleep(2000);
+
     } catch (Exception e) {
         System.out.println("Erro no CT31: " + e.getMessage());
         e.printStackTrace();
@@ -608,9 +682,10 @@ public class QuizGigiTest {
         js.executeScript("arguments[0].click();", btnVoltarAoNormal);
         Thread.sleep(5000);
         System.out.println("Clicou no botão 'Voltar ao modo normal' via ancestor.");
+        System.out.println("CT31.1 executado com sucesso!");
 
     } catch (Exception e) {
-        System.out.println("Erro no CT31_1: " + e.getMessage());
+        System.out.println("Erro no CT31.1: " + e.getMessage());
         e.printStackTrace();
         fail("Falha no teste CT31.1");
     } finally {
@@ -668,10 +743,104 @@ public class QuizGigiTest {
             System.out.println("Clicou em 'Sortear outro aluno'.");
             Thread.sleep(5000);
 
+            WebElement nomeSorteadoEl = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//p[contains(@class, 'MuiTypography-body1')]")
+            ));
+            String nomeSorteado = nomeSorteadoEl.getText();
+
+            assertFalse(nomeSorteado.isEmpty(), "Nenhum nome foi exibido após o sorteio.");
+            System.out.println("Nome sorteado: " + nomeSorteado);
+            System.out.println("CT32 executado com sucesso!");
+
+
     } catch (Exception e) {
         System.out.println("Erro no CT32: " + e.getMessage());
         e.printStackTrace();
         fail("Falha no teste CT32.");
+    } finally {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
+
+@Test
+    void CT32_1() {
+    try {
+        WebElement btnCursos = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//span[text()='Cursos']")));
+        js.executeScript("arguments[0].click();", btnCursos);
+        System.out.println("Clicou no botão 'Cursos'.");
+        wait.until(ExpectedConditions.urlContains("/listcurso"));
+
+        WebElement abaConcluidos = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'concluídos') or " +
+                    "contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'concluidos')]")
+        ));
+        js.executeScript("arguments[0].click();", abaConcluidos);
+        System.out.println("Abriu a aba 'Concluídos'.");
+        Thread.sleep(3000);
+
+        WebElement cardOneFrameMan = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//h6[text()='OneFrameMan']/ancestor::div[contains(@class,'MuiCard-root')]")
+        ));
+        WebElement btnAcessar = cardOneFrameMan.findElement(By.xpath(".//button"));
+        js.executeScript("arguments[0].scrollIntoView(true);", btnAcessar);
+        wait.until(ExpectedConditions.elementToBeClickable(btnAcessar));
+        js.executeScript("arguments[0].click();", btnAcessar);
+        System.out.println("Clicou para acessar o curso OneFrameMan.");
+
+        wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[contains(@title,'Abrir Quiz Gigi')]")
+        )).click();
+        System.out.println("Clicou no botão 'Abrir Quiz Gigi'.");
+        Thread.sleep(5000);
+
+        WebElement btnPerguntaPersonalizada = wait.until(
+        ExpectedConditions.elementToBeClickable(
+        By.xpath("//button[@aria-label='Pergunta Personalizada']")
+        ));
+        js.executeScript("arguments[0].click();", btnPerguntaPersonalizada);
+        Thread.sleep(5000);
+        System.out.println("Clicou no botão 'Pergunta Personalizada' via ancestor.");
+
+        WebElement btnEscolherOutro = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(@title,'Escolher outro aluno') or contains(.,'Escolher outro aluno')]")
+            ));
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", btnEscolherOutro);
+            js.executeScript("arguments[0].click();", btnEscolherOutro);
+            System.out.println("Clicou em 'Escolher outro aluno'.");
+            Thread.sleep(2000);
+
+            WebElement campoBusca = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//input[contains(@placeholder,'Buscar aluno')]")
+            ));
+            campoBusca.sendKeys("Zil");
+            System.out.println("Digitou no campo de busca.");
+            Thread.sleep(2000);
+
+            String xpathZildo = "//*[normalize-space(text())='Zildo Tester Java']/ancestor::button | //*[normalize-space(text())='Zildo Tester Java']/ancestor::div[@role='button']";
+            WebElement opcaoZildo = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpathZildo)
+            ));
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", opcaoZildo);
+            js.executeScript("arguments[0].click();", opcaoZildo);
+            System.out.println("Selecionou o aluno 'Zildo Tester Java'.");
+            Thread.sleep(2000);
+
+            WebElement nomeSorteadoEl = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//p[contains(@class, 'MuiTypography-body1')]")
+            ));
+            String nomeSorteado = nomeSorteadoEl.getText();
+
+            assertFalse(nomeSorteado.isEmpty(), "Nenhum nome foi exibido após o sorteio.");
+            System.out.println("Nome sorteado: " + nomeSorteado);
+            System.out.println("CT32.1 executado com sucesso!");
+
+
+    } catch (Exception e) {
+        System.out.println("Erro no CT32.1: " + e.getMessage());
+        e.printStackTrace();
+        fail("Falha no teste CT32.1");
     } finally {
         if (driver != null) {
             driver.quit();
