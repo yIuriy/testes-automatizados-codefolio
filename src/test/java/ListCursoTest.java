@@ -31,36 +31,64 @@ public class ListCursoTest {
 
     @AfterEach
     void teardown() {
-        if (driver != null) driver.quit();
+        if (driver != null)
+            driver.quit();
     }
 
+    @Test
+    void CT45() {
+        try {
+            Thread.sleep(4000);
+            listCursoPage.abrirPaginaCursos();
+
+            Thread.sleep(2000);
+            assertTrue(listCursoPage.verificarSeCurosAparece("Introdução a IHC"));
+            assertFalse(listCursoPage.verificarSeCurosAparece("Amanhecer"));
+            assertFalse(listCursoPage.verificarSeCurosAparece("Testes Grupo1"));
+
+            listCursoPage.abaConcluido();
+            Thread.sleep(2000);
+            assertTrue(listCursoPage.verificarSeCurosAparece("Amanhecer"));
+            assertFalse(listCursoPage.verificarSeCurosAparece("Testes Grupo1"));
+            assertFalse(listCursoPage.verificarSeCurosAparece("Introdução a IHC"));
+
+            listCursoPage.abaEmAndamento();
+            Thread.sleep(2000);
+            assertTrue(listCursoPage.verificarSeCurosAparece("Testes Grupo1"));
+            assertFalse(listCursoPage.verificarSeCurosAparece("Amanhecer"));
+            assertFalse(listCursoPage.verificarSeCurosAparece("Introdução a IHC"));
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
 
     @Test
-    void CT45(){
-        try{
-        Thread.sleep(4000);
-        listCursoPage.abrirPaginaCursos();
+    void CT46() {
+        try {
+            Thread.sleep(4000);
+            listCursoPage.abrirPaginaCursos();
+            Thread.sleep(2000);
+            String nomeCurosAcessar = "Curso Python";
+            if (listCursoPage.verificarSeCurosAparece(nomeCurosAcessar)) {
+                listCursoPage.abrirCurso(nomeCurosAcessar);
+                Thread.sleep(1500);
 
-        Thread.sleep(2000);
-        assertTrue(listCursoPage.verificarSeCurosAparece("Introdução a IHC"));
-        assertFalse(listCursoPage.verificarSeCurosAparece("Amanhecer"));
-        assertFalse(listCursoPage.verificarSeCurosAparece("Testes Grupo1"));
+                listCursoPage.abrirPaginaCursos();
+                Thread.sleep(2000);
 
-        listCursoPage.abaConcluido();
-        Thread.sleep(2000);
-        assertTrue(listCursoPage.verificarSeCurosAparece("Amanhecer"));
-        assertFalse(listCursoPage.verificarSeCurosAparece("Testes Grupo1"));
-        assertFalse(listCursoPage.verificarSeCurosAparece("Introdução a IHC"));
+                assertFalse(listCursoPage.verificarSeCurosAparece(nomeCurosAcessar));
 
-        listCursoPage.abaEmAndamento();
-        Thread.sleep(2000);
-        assertTrue(listCursoPage.verificarSeCurosAparece("Testes Grupo1"));
-        assertFalse(listCursoPage.verificarSeCurosAparece("Amanhecer"));
-        assertFalse(listCursoPage.verificarSeCurosAparece("Introdução a IHC"));
-        
+                listCursoPage.abaEmAndamento();
+                assertTrue(listCursoPage.verificarSeCurosAparece(nomeCurosAcessar));
 
-        }catch(Exception e){
-System.err.println(e.getMessage());
+            } else {
+                System.out.println("Teste não realizado");
+                assertTrue(false);
+            }
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 
@@ -98,7 +126,7 @@ System.err.println(e.getMessage());
             System.out.println(e.getMessage());
         }
     }
-    
+
     // RF49 – Assistir Vídeo
     @Test
     @DisplayName("Verifica se vídeo do Youtube carregou em curso sem senha na aba Em Andamento")
@@ -118,7 +146,7 @@ System.err.println(e.getMessage());
         }
     }
 
-        @Test
+    @Test
     @DisplayName("Verifica se vídeo do Youtube carregou em curso sem senha na aba de Concluídos")
     void CT49_1() {
         try {
@@ -149,7 +177,7 @@ System.err.println(e.getMessage());
         String srcVideoInicial = listCursoPage.pegarSrcVideo();
         Thread.sleep(3000);
         listCursoPage.avancarVideo()
-                     .videoCarregou();
+                .videoCarregou();
         String srcProximoVideo = listCursoPage.pegarSrcVideo();
         assertNotEquals(srcVideoInicial, srcProximoVideo, "O vídeo não mudou após avançar/voltar.");
     }
@@ -166,15 +194,15 @@ System.err.println(e.getMessage());
         String srcVideoInicial = listCursoPage.pegarSrcVideo();
         Thread.sleep(3000);
         listCursoPage.avancarVideo()
-                     .videoCarregou();
+                .videoCarregou();
         listCursoPage.voltarVideo()
-                     .videoCarregou();
+                .videoCarregou();
         String srcVoltando = listCursoPage.pegarSrcVideo();
         assertEquals(srcVideoInicial, srcVoltando, "Algum dos botões não funcionou");
     }
 
     // RF51 – Acessar Materiais Extras
-    @Test  
+    @Test
     @DisplayName("Acessar materiais extras de um curso que não tem materiais extras")
     void CT51() throws InterruptedException {
         Thread.sleep(5000);
@@ -186,11 +214,12 @@ System.err.println(e.getMessage());
 
         listCursoPage.materiaisExtra();
 
-        assertTrue(listCursoPage.mensagemSemMateriaisExtraEstaNaTela(), "A mensagem de ausência de materiais extras não apareceu.");
+        assertTrue(listCursoPage.mensagemSemMateriaisExtraEstaNaTela(),
+                "A mensagem de ausência de materiais extras não apareceu.");
 
     }
 
-    @Test  
+    @Test
     @DisplayName("Acessar materiais extras de um curso que TEM materiais extras")
     void CT51_1() throws InterruptedException {
         Thread.sleep(5000);
@@ -202,10 +231,12 @@ System.err.println(e.getMessage());
 
         listCursoPage.materiaisExtra();
 
-        assertFalse(listCursoPage.mensagemSemMateriaisExtraEstaNaTela(), "A mensagem de ausência de materiais extras apareceu.");
+        assertFalse(listCursoPage.mensagemSemMateriaisExtraEstaNaTela(),
+                "A mensagem de ausência de materiais extras apareceu.");
     }
-    //RF52 - Acessar Quiz Desbloqueado
-    @Test  
+
+    // RF52 - Acessar Quiz Desbloqueado
+    @Test
     @DisplayName("Verificar o acesso a quizzes desbloqueados no curso")
     void CT52() throws InterruptedException {
         Thread.sleep(5000);
@@ -218,8 +249,8 @@ System.err.println(e.getMessage());
         assertFalse(listCursoPage.mensagemDeBloqueioQuiz(), "A mensagem de bloqueio do quiz apareceu.");
     }
 
-    //RF53 - Acessar Quiz Bloqueado
-    @Test  
+    // RF53 - Acessar Quiz Bloqueado
+    @Test
     @DisplayName("Verificar o acesso a quizzes desbloqueados no curso")
     void CT53() throws InterruptedException {
         Thread.sleep(5000);
@@ -239,8 +270,8 @@ System.err.println(e.getMessage());
             listCursoPage.abrirPaginaCursos()
                     .abaEmAndamento()
                     // 1. Acessar um curso
-                    .abrirCurso("Teste") 
-                    
+                    .abrirCurso("Teste")
+
                     .clicarVerVideoPorTitulo("video1");
 
             // Resultado Esperado (CT-38/39): O vídeo aparece na tela
@@ -259,8 +290,8 @@ System.err.println(e.getMessage());
             Thread.sleep(5000);
             listCursoPage.abrirPaginaCursos()
                     .abaEmAndamento()
-                    
-                    .abrirCurso("Teste em Andamento") 
+
+                    .abrirCurso("Teste em Andamento")
                     .clicarVerVideoPorTitulo("video1");
             assertTrue(listCursoPage.videoCarregou(), "O vídeo não carregou.");
             Thread.sleep(3000); // simula assistir
