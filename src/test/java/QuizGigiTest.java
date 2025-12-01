@@ -1,6 +1,7 @@
-
+import pages.ListCursoPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -27,6 +28,7 @@ public class QuizGigiTest {
     WebDriverWait wait;
     DashboardPage dashboardPage;
     JavascriptExecutor js;
+    ListCursoPage listCursoPage;
 
     @BeforeEach
     void setup() {
@@ -37,6 +39,7 @@ public class QuizGigiTest {
         authentication = new Authentication(driver);
         manageCoursePage = new ManageCoursePage(driver);
         dashboardPage = new DashboardPage(driver);
+        listCursoPage = new ListCursoPage(driver);
 
         authentication.realizarLoginViaIndexedBD();
 
@@ -846,5 +849,33 @@ public class QuizGigiTest {
             driver.quit();
         }
     }
-}
+    }
+    @Test
+    @DisplayName("Acessar Quiz Gigi (Fluxo: Concluídos -> Curso -> Fechar -> Quiz)")
+    void CT37() {
+        try {
+            listCursoPage.abrirPaginaCursos();
+            Thread.sleep(2000);
+            listCursoPage.clicarAbaConcluidos();
+            Thread.sleep(2000);
+            listCursoPage.abrirCurso("Teste quiz grupo1");
+            try {
+                listCursoPage.clicarBotaoFechar();
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                System.out.println("Botão Fechar não apareceu, seguindo fluxo...");
+            }
+            listCursoPage.clicarAbrirQuizGigi();
+            Thread.sleep(2000);
+            boolean quizCarregou = listCursoPage.rankingEstaVisivel() || 
+                                   driver.getPageSource().contains("Ranking") || 
+                                   driver.getPageSource().contains("Pergunta");
+            
+            assertTrue(quizCarregou, "O Quiz Gigi não foi carregado corretamente.");
+            System.out.println("Sucesso: Quiz Gigi acessado no curso 'Teste quiz grupo1'.");
+
+        } catch (Exception e) {
+            fail("Erro ao acessar o quiz: " + e.getMessage());
+        }
+    }
 }
