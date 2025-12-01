@@ -287,4 +287,41 @@ public ListCursoPage abaEmAndamento() {
         }
     }
 
+    public void colocarPIN(String PIN) {
+
+        WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//div[.//button[contains(normalize-space(), 'Enviar')]]")));
+
+        WebElement input = div.findElement(By.xpath(".//input"));
+
+        input.click();
+        input.clear();
+        input.sendKeys(PIN);
+
+        div.findElement(
+                By.xpath(".//button[contains(normalize-space(), 'Enviar')]")).click();
+    }
+
+    public boolean verificarMensagemDePINIncorreto(){
+        try{
+        WebElement div = driver.findElement(
+            By.xpath("//div[contains(normalize-space(), 'PIN incorreto. Tente novamente.')]")
+        );
+        return true;
+        }catch(Exception e){
+        return false;
+        }
+    }
+
+    public boolean verificarSeEntrouNoCurso(){
+        try{
+        WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.xpath("//button[contains(normalize-space(), 'Materiais Extras')]")
+        ));
+        return true;
+        }catch(Exception e){
+        return false;
+        }
+    }
+
 }

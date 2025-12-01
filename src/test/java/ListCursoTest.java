@@ -63,6 +63,7 @@ public class ListCursoTest {
         }
     }
 
+    // Passou
     @Test
     void CT46() {
         try {
@@ -82,6 +83,82 @@ public class ListCursoTest {
                 listCursoPage.abaEmAndamento();
                 assertTrue(listCursoPage.verificarSeCurosAparece(nomeCurosAcessar));
 
+            } else {
+                System.out.println("Teste não realizado");
+                assertTrue(false);
+            }
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    //Passou
+    @Test
+    void CT47_1() {
+        try {
+            Thread.sleep(4000);
+            listCursoPage.abrirPaginaCursos();
+            Thread.sleep(2000);
+            String nomeCurosAcessar = "Testes Grupo1";
+            String senhaCurso = "abc";
+
+            if (listCursoPage.verificarSeCurosAparece(nomeCurosAcessar)) {
+                listCursoPage.abrirCurso(nomeCurosAcessar);
+                Thread.sleep(1500);
+
+                listCursoPage.colocarPIN(senhaCurso);
+                Thread.sleep(500);
+                assertTrue(listCursoPage.verificarMensagemDePINIncorreto());
+                
+
+                driver.get("https://testes-codefolio.web.app/listcurso");
+                Thread.sleep(3000);
+                assertTrue(listCursoPage.verificarSeCurosAparece(nomeCurosAcessar));
+                Thread.sleep(3000);
+                
+            } else {
+                System.out.println("Teste não realizado");
+                assertTrue(false);
+            }
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    // Passou
+    @Test
+    void CT47_2() {
+        try {
+            Thread.sleep(4000);
+            listCursoPage.abrirPaginaCursos();
+            Thread.sleep(2000);
+            String nomeCurosAcessar = "Testes Grupo1";
+            String senhaCurso = "12345";
+
+            if (listCursoPage.verificarSeCurosAparece(nomeCurosAcessar)) {
+                listCursoPage.abrirCurso(nomeCurosAcessar);
+                Thread.sleep(1500);
+
+                listCursoPage.colocarPIN(senhaCurso);
+                Thread.sleep(500);
+
+                assertFalse(listCursoPage.verificarMensagemDePINIncorreto());
+                
+                assertTrue(listCursoPage.verificarSeEntrouNoCurso());
+                Thread.sleep(1500);
+
+                driver.get("https://testes-codefolio.web.app/listcurso");
+                Thread.sleep(3000);
+
+                assertFalse(listCursoPage.verificarSeCurosAparece(nomeCurosAcessar));
+
+                listCursoPage.abaEmAndamento();
+                Thread.sleep(2000);
+                assertTrue(listCursoPage.verificarSeCurosAparece(nomeCurosAcessar));
+                Thread.sleep(6000);
+                
             } else {
                 System.out.println("Teste não realizado");
                 assertTrue(false);
