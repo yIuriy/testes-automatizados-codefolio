@@ -11,6 +11,7 @@ import utils.Authentication;
 import org.openqa.selenium.interactions.Actions;
 
 import java.time.Duration;
+import java.util.Timer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -191,120 +192,123 @@ public class EditCourseTest {
         irAteAPaginaDeGerenciarCursos();
 
         // 1. Entrar no curso
+        // Botão padrão do card -> Clique Normal
         WebElement btnGenDoCard = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//h6[contains(text(), 'Introdução ao Java')]/ancestor::div[contains(@class, 'MuiCard-root')]//button[normalize-space()='Gerenciar Curso']")
         ));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btnGenDoCard);
+        btnGenDoCard.click();
+
         wait.until(ExpectedConditions.urlContains("courseId"));
 
-        // 2. Clicar na aba "Vídeos"
-        wait.until(ExpectedConditions.elementToBeClickable(
+        // 2. Ir para a aba Vídeos -> Clique Normal
+        WebElement abaVideos = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[contains(.,'Vídeos')]")
-        )).click();
-
-        // 3. Clicar no botão de EDITAR
-        // ESTRATÉGIA NOVA: Acha o texto do vídeo -> sobe para o item da lista (li) -> busca o botão que tem o ícone EditIcon dentro
-        String tituloDoVideo = "Aula 1 - Introdução ao Java";
-
-        WebElement btnEditarVideo = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//span[contains(text(), '" + tituloDoVideo + "')]/ancestor::li//button[.//svg[@data-testid='EditIcon']]")
         ));
+        abaVideos.click();
 
-        // Clica via JS para garantir
-        js.executeScript("arguments[0].click();", btnEditarVideo);
+        // 3. Clicar no botão de EDITAR (Ícone SVG)
+        // AQUI USAMOS O FORCAR CLIQUE (Estratégia do SVG)
+        WebElement iconeEditar = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//*[name()='svg' and @data-testid='EditIcon']")
+        ));
+        WebElement btnEditar = iconeEditar.findElement(By.xpath("./..")); // Pega o botão pai
 
-        // 4. Alterar os campos (Título e Descrição)
+        forcarClique(btnEditar);
+
+        // 4. Editar os campos
         WebElement inputTitulo = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//label[text()='Título do Vídeo']/following-sibling::div//input")
         ));
-
         // Limpeza segura para React
         inputTitulo.sendKeys(Keys.CONTROL + "a");
         inputTitulo.sendKeys(Keys.DELETE);
-        inputTitulo.sendKeys("Aula 1 - Java Editada");
+        inputTitulo.sendKeys("Vídeo Editado - Teste Automatizado");
+
 
         WebElement inputDesc = driver.findElement(
-                By.xpath("//label[text()='Descrição do Vídeo']/following-sibling::div//input")
+                By.xpath("//label[text()='Descrição do Vídeo']/following-sibling::div//textarea[1]")
         );
         inputDesc.sendKeys(Keys.CONTROL + "a");
         inputDesc.sendKeys(Keys.DELETE);
-        inputDesc.sendKeys("Descrição atualizada com sucesso");
+        inputDesc.sendKeys("Descrição atualizada via Selenium");
 
-        // 5. Salvar (ajuste o texto do botão conforme sua tela, ex: 'Salvar', 'Atualizar', 'Salvar Curso')
-        WebElement btnSalvar = driver.findElement(
-                By.xpath("//button[contains(text(), 'Salvar')]")
-        );
-        js.executeScript("arguments[0].click();", btnSalvar);
+        // 5. Salvar (Botão Azul/Roxo com texto)
+        // AQUI USAMOS CLIQUE NORMAL (Baseado na imagem enviada com texto "Editar Vídeo")
+        WebElement btnSalvar = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(text(), 'Editar Vídeo')]")
+        ));
+        btnSalvar.click();
 
-        // 6. Validar (Mensagem e mudança na lista)
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
+        // 6. Validar Sucesso
+        WebElement toastSucesso = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[contains(text(), 'sucesso')]")
         ));
+        assertTrue(toastSucesso.isDisplayed(), "Mensagem de sucesso não apareceu!");
 
-        // Fecha o modal de sucesso se houver
+        // Fecha o modal clicando em OK (se existir)
         try {
             WebElement btnOk = driver.findElement(By.xpath("//div[@role='presentation']//button[normalize-space()='OK']"));
-            js.executeScript("arguments[0].click();", btnOk);
-        } catch (Exception e) {
-            // Ignora se não tiver botão OK e o modal fechar sozinho
-        }
+            btnOk.click();
+        } catch (Exception e) { /* Ignora se o modal fechar sozinho */ }
 
-        // Valida se o título mudou na lista
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//span[contains(text(), 'Aula 1 - Java Editada')]")
+        // 7. Validação Final: Verifica se o título mudou na lista
+        WebElement tituloNaLista = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(), 'Vídeo Editado - Teste Automatizado')]")
         ));
+        assertTrue(tituloNaLista.isDisplayed());
+        System.out.println("Passou");
     }
     @Test
     void CT07_exclusaoVideo(){
         irAteAPaginaDeGerenciarCursos();
 
-        // 1. Entrar no curso
         WebElement btnGenDoCard = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//h6[contains(text(), 'Introdução ao Java')]/ancestor::div[contains(@class, 'MuiCard-root')]//button[normalize-space()='Gerenciar Curso']")
         ));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btnGenDoCard);
+        forcarClique(btnGenDoCard);
         wait.until(ExpectedConditions.urlContains("courseId"));
 
-        // 2. Clicar na aba "Vídeos"
-        wait.until(ExpectedConditions.elementToBeClickable(
+        WebElement abaVideos = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[contains(.,'Vídeos')]")
-        )).click();
+        ));
+        forcarClique(abaVideos);
 
-        // Nome do vídeo que será deletado
-        String tituloVideoParaDeletar = "Aula 1 - Java Editada"; // Usando o nome editado no teste anterior
 
         // 3. Clicar no botão de EXCLUIR
-        // Tenta achar pelo ícone 'DeleteIcon'. Se o dev mudou o nome, o xpath abaixo procura pelo botão que tem a classe 'edgeEnd' (o da direita)
-        WebElement btnExcluirVideo = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//span[contains(text(), '" + tituloVideoParaDeletar + "')]/ancestor::li//button[.//svg[@data-testid='DeleteIcon'] or contains(@class, 'MuiIconButton-edgeEnd')]")
+        // Mesma estratégia: acha o ícone da lixeira e clica no pai dele
+        WebElement iconeExcluir = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//*[name()='svg' and @data-testid='DeleteIcon']")
         ));
 
-        js.executeScript("arguments[0].click();", btnExcluirVideo);
+        WebElement btnExcluir = iconeExcluir.findElement(By.xpath("./.."));
 
-        // 4. Confirmar a exclusão no Modal
+        System.out.println("Botão de excluir encontrado. Tentando clicar...");
+        forcarClique(btnExcluir);
+
+        // 4. Confirmar exclusão
         WebElement btnConfirmar = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//button[contains(text(), 'Confirmar') or contains(text(), 'Sim') or contains(text(), 'Deletar')]")
         ));
-        js.executeScript("arguments[0].click();", btnConfirmar);
+        forcarClique(btnConfirmar);
 
-        // 5. Validar mensagem de sucesso
+        // 5. Validar mensagem
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//*[contains(text(), 'sucesso')]")
         ));
 
         try {
             WebElement btnOk = driver.findElement(By.xpath("//div[@role='presentation']//button[normalize-space()='OK']"));
-            js.executeScript("arguments[0].click();", btnOk);
-        } catch (Exception e) {
-            // Ignora
-        }
+            forcarClique(btnOk);
+        } catch (Exception e) { }
 
-        // 6. Validação final: O elemento NÃO deve mais estar visível
-        Boolean videoSumiu = wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                By.xpath("//span[contains(text(), '" + tituloVideoParaDeletar + "')]")
+        // 6. Validação: Verifica se o ícone da lixeira sumiu (lista vazia) ou se o vídeo específico sumiu
+        boolean lixeiraSumiu = wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.xpath("//*[name()='svg' and @data-testid='DeleteIcon']")
         ));
 
-        assert videoSumiu;
+        // Se lixeiraSumiu for true, significa que o botão não está mais na tela (deletado com sucesso)
+        assert lixeiraSumiu;
+        System.out.println("Foi excluido!");
     }
 
     @Test
@@ -368,5 +372,24 @@ public class EditCourseTest {
 
         // 3. Espera a URL de destino carregar
         wait.until(ExpectedConditions.urlContains("/manage-courses"));
+    }
+
+    private void forcarClique(WebElement elemento) {
+        try {
+            // Tentativa 1: Clique Nativo com Wait
+            wait.until(ExpectedConditions.elementToBeClickable(elemento));
+            elemento.click();
+        } catch (Exception e) {
+            try {
+                // Tentativa 2: Javascript Executor (Padrão)
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", elemento);
+            } catch (Exception e2) {
+                // Tentativa 3: Javascript Event Dispatcher (Para React/MUI teimosos)
+                ((JavascriptExecutor) driver).executeScript(
+                        "var ev = document.createEvent('MouseEvent');" +
+                                "ev.initMouseEvent('click',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);" +
+                                "arguments[0].dispatchEvent(ev);", elemento);
+            }
+        }
     }
 }
