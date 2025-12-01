@@ -155,8 +155,111 @@ public ListCursoPage abaEmAndamento() {
     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", btn);
     ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
     return this;
-}
+    }
 
+    public ListCursoPage clicarReportarProblema() {
+        By botaoReportar = By.cssSelector("button[title='Reportar problema']");
+        WebElement botao = wait.until(ExpectedConditions.elementToBeClickable(botaoReportar));
+        js.executeScript("arguments[0].click();", botao);
+        return this;
+    }
+
+    public ListCursoPage preencherDescricaoProblema(String descricao) {
+        WebElement campo = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.xpath("//textarea"))
+        );
+        campo.clear();
+        campo.sendKeys(descricao);
+        return this;
+    }
+
+    public ListCursoPage enviarReporteProblema() {
+        By botaoEnviar = By.xpath(
+                "//div[@role='dialog']//button[normalize-space()='Enviar Reporte']"
+        );
+
+        WebElement botao = wait.until(
+                ExpectedConditions.elementToBeClickable(botaoEnviar)
+        );
+
+        js.executeScript("arguments[0].click();", botao);
+        return this;
+    }
+
+    public ListCursoPage abrirPaginaAvaliacoes() {
+        By linkAvaliacoes = By.xpath(
+                "//a[@href='/minhas-avaliacoes' or .//span[normalize-space()='Avaliações']]"
+        );
+
+        WebElement link = wait.until(
+                ExpectedConditions.elementToBeClickable(linkAvaliacoes)
+        );
+
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", link);
+        js.executeScript("arguments[0].click();", link);
+
+        return this;
+    }
+
+
+    public ListCursoPage abrirAvaliacoesDoCurso(String tituloCurso) {
+        By botaoAvaliacoes = By.xpath(
+            "//h5[contains(normalize-space(),'" + tituloCurso + "')]" +
+            "/ancestor::div[contains(@class,'MuiCard-root')][1]" +
+            "//button[.//p[normalize-space()='Avaliações do curso']]"
+        );
+
+        WebElement botao = wait.until(
+                ExpectedConditions.elementToBeClickable(botaoAvaliacoes)
+        );
+
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", botao);
+        js.executeScript("arguments[0].click();", botao);
+
+        return this;
+    }
+
+    public boolean avaliacaoAparece(String textoAvaliacao) {
+        try {
+            By avaliacao = By.xpath(
+                "//div[contains(@class,'MuiCollapse-entered')]//p[normalize-space()='" + textoAvaliacao + "']"
+            );
+
+            WebElement elemento = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(avaliacao)
+            );
+
+            return elemento.isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public boolean popupReportarProblemaVisivel() {
+        try {
+            WebElement dialog = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            By.cssSelector("div[role='dialog']")
+                    )
+            );
+            return dialog.isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    public boolean popupReportarProblemaFechado() {
+        try {
+            WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(5));
+            return w.until(
+                    ExpectedConditions.invisibilityOfElementLocated(
+                            By.cssSelector("div[role='dialog']")
+                    )
+            );
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
 
 
     public boolean mensagemDeBloqueioQuiz() {

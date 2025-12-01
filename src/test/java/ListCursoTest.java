@@ -263,6 +263,57 @@ public class ListCursoTest {
         assertTrue(listCursoPage.mensagemDeBloqueioQuiz(), "A mensagem de bloqueio do quiz não apareceu.");
     }
 
+    // RF54 – Reportar problema
+    @Test
+    @DisplayName("Verificar se o popup de reportar problema é fechado após envio")
+    void CT54() {
+        try {
+            Thread.sleep(5000);
+
+            listCursoPage.abrirPaginaCursos()
+                    .abaEmAndamento()
+                    .abrirCurso("Teste em Andamento")
+                    .clicarReportarProblema();
+
+            assertTrue(
+                    listCursoPage.popupReportarProblemaVisivel(),
+                    "O popup de reportar problema não apareceu."
+            );
+
+            listCursoPage
+                    .preencherDescricaoProblema("Vídeo não está carregando corretamente.")
+                    .enviarReporteProblema();
+
+            assertTrue(
+                    listCursoPage.popupReportarProblemaFechado(),
+                    "O popup NÃO foi fechado após o envio do reporte."
+            );
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // RF55 – Consultar avaliações e notas
+    @Test
+    @DisplayName("Verifica se o aluno consegue visualizar suas avaliações e notas")
+    void CT55() {
+        try {
+            Thread.sleep(5000);
+
+            listCursoPage.abrirPaginaAvaliacoes()
+                         .abrirAvaliacoesDoCurso("Curso Teste - Frederico Barcelos");
+
+            assertTrue(
+                listCursoPage.avaliacaoAparece("Teste 1"),
+                "A avaliação 'Teste 1' não apareceu na tela."
+            );
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     @Test
     void CT38() {
         try {
