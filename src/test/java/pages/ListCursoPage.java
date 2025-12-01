@@ -149,12 +149,12 @@ public ListCursoPage abaEmAndamento() {
     }
 
     public ListCursoPage clicaQuizBloqueado() {
-    WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(12));
-    By botaoQuizBloqueado = By.xpath("//button[contains(normalize-space(.), 'Quiz Bloqueado')]");
-    WebElement btn = w.until(ExpectedConditions.elementToBeClickable(botaoQuizBloqueado));
-    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", btn);
-    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
-    return this;
+        WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(12));
+        By botaoQuizBloqueado = By.xpath("//button[contains(normalize-space(.), 'Quiz Bloqueado')]");
+        WebElement btn = w.until(ExpectedConditions.elementToBeClickable(botaoQuizBloqueado));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", btn);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
+        return this;
     }
 
     public ListCursoPage clicarReportarProblema() {
