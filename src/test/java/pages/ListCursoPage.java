@@ -39,6 +39,7 @@ public ListCursoPage abaEmAndamento() {
         botao.click();
         return this;
     }
+    
 
     public ListCursoPage abrirCurso(String nomeCurso) {
         WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(12));
@@ -323,5 +324,65 @@ public ListCursoPage abaEmAndamento() {
         return false;
         }
     }
-
+    public void clicarBotaoRanking() {
+        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[@aria-label='Resumo do Quiz']")
+        ));
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn);
+        btn.click();
+    }
+    public boolean rankingEstaVisivel() {
+        try {
+            return wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(), 'Ranking') or contains(text(), 'Resumo')]")
+            )).isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+    public ListCursoPage clicarAbrirQuizGigi() {
+        WebElement btnQuiz = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[@title='Abrir Quiz Gigi']")
+        ));
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", btnQuiz);
+        btnQuiz.click();
+        return this;
+    }
+    public void clicarBotaoFechar() {
+        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[normalize-space()='Fechar']")
+        ));
+        js.executeScript("arguments[0].click();", btn);
+    }
+    public void clicarAbaConcluidos() {
+        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[normalize-space()='Concluídos']")
+        ));
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn);
+        btn.click();
+    }
+    public void clicarEncerrarQuiz() {
+        // Tenta localizar por texto ou title, garantindo robustez
+        By botaoEncerrar = By.xpath("//button[contains(normalize-space(), 'Encerrar Quiz') or @title='Encerrar Quiz']");
+        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(botaoEncerrar));
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", btn);
+        btn.click();
+    }
+    public void confirmarEncerramentoQuiz() {
+        // Procura botão de confirmação (Sim/Confirmar/Encerrar) dentro de um diálogo
+        By botaoConfirmar = By.xpath("//div[@role='dialog']//button[contains(normalize-space(), 'Sim') or contains(normalize-space(), 'Confirmar') or contains(normalize-space(), 'Encerrar')]");
+        WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(botaoConfirmar));
+        js.executeScript("arguments[0].click();", btn);
+    }
+    public boolean resultadosDoQuizEstaoVisiveis() {
+        try {
+            // Procura por indicadores comuns de tela de resultado, como "Resultado", "Pontuação" ou "Resumo"
+            WebElement resultado = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(), 'Resultado') or contains(text(), 'Sua Pontuação') or contains(text(), 'Resumo')]")
+            ));
+            return resultado.isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
 }
