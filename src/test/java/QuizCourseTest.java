@@ -52,4 +52,44 @@ public class QuizCourseTest {
             System.out.println(e.getMessage());
         }
     }
+
+    @Test
+    void CT015() {
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Grupo 01");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Quiz");
+            quizPage.clicarBotaoEditarQuiz();
+            quizPage.inserirTituloPergunta("Qual o Pokémon mais fofo:");
+            quizPage.inserirOpcao("Pikachu", 1);
+            quizPage.inserirOpcao("Furret", 2);
+            quizPage.declararOpcaoCorreta(2);
+            quizPage.clicarBotaoSalvarQuestao();
+            quizPage.verificarSeQuestaoFoiSalva();
+            quizPage.clicarBotaoCancelar();
+            quizPage.clicarBotaoSetaBaixo();
+            quizPage.clicarBotaoExcluirQuestao();
+            quizPage.clicarBotaoConfirmarExcluirQuestao();
+            quizPage.verificarSeQuestaoFoiExcluida();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Test
+    void CT016(){
+        try {
+            Thread.sleep(5000);
+            dashboardPage.irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Grupo 01");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Quiz");
+            quizPage.clicarBotaoExcluirQuiz();
+            quizPage.clicarBotaoConfirmaExcluirQuiz();
+            quizPage.verificarSeQuizFoiExcluido();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
