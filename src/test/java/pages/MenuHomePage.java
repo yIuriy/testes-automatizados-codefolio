@@ -165,5 +165,47 @@ public class MenuHomePage {
             return null;
         }
     }
+    public String pegarFonteDoVideo(String titulo) {
+        try {
+            WebElement divVideo = getVideoPorTitulo(titulo);
+            // Procura um iframe (player do youtube) dentro do componente do vídeo
+            WebElement iframe = divVideo.findElement(By.xpath(".//iframe"));
+            return iframe.getAttribute("src");
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+
+public boolean botoesDeInteracaoEstaoVisiveis(String titulo) {
+        try {
+            WebElement divVideo = getVideoPorTitulo(titulo);
+            WebElement btnLike = divVideo.findElement(By.xpath(".//button[.//*[@data-testid='ThumbUpIcon']]"));
+            WebElement btnDislike = divVideo.findElement(By.xpath(".//button[.//*[@data-testid='ThumbDownIcon']]"));
+            return btnLike.isDisplayed() && btnDislike.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean videoEstaListado(String titulo) {
+        try {
+            WebElement divVideo = getVideoPorTitulo(titulo);
+            return divVideo.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean playerDeVideoEstaVisivel(String titulo) {
+        try {
+            WebElement divVideo = getVideoPorTitulo(titulo);
+            WebElement iframe = divVideo.findElement(By.xpath(".//iframe[contains(@src, 'youtube') or contains(@src, 'player')]"));
+            return iframe.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
 }

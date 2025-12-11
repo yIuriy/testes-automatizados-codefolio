@@ -2,8 +2,10 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -215,4 +217,74 @@ public class MenuHomeTest {
     private void irAteAHome() {
         wait.until(ExpectedConditions.urlContains("/"));
     }
+    @Test
+    void CT38_Home_VisualizarListagemDeVideos() {
+        try {
+            Thread.sleep(4000);
+            irAteAHome();
+            String video1 = "Selenium (Testes Automatizados)";
+            
+            assertTrue(menuHomePage.videoEstaListado(video1), 
+                "O vídeo '" + video1 + "' deveria estar listado na Home.");
+        } catch (Exception e) {
+            System.err.println("Falha no CT38_Home: " + e.getMessage());
+            fail("Erro ao listar vídeos na Home");
+        }
+    }
+    @Test
+    void CT38_1_Home_ValidarIntegridadeDoCardDeVideo() {
+        try {
+            Thread.sleep(4000);
+            irAteAHome();
+
+            String tituloVideo = "Selenium (Testes Automatizados)";
+            assertTrue(menuHomePage.videoEstaListado(tituloVideo), 
+                "Falha Crítica: O vídeo não foi encontrado na listagem da Home.");
+            assertTrue(menuHomePage.botoesDeInteracaoEstaoVisiveis(tituloVideo), 
+                "O card do vídeo está incompleto: botões de Like/Dislike não foram listados.");
+
+        } catch (Exception e) {
+            System.err.println("Falha no CT38_1: " + e.getMessage());
+            fail("Erro ao validar integridade da listagem de vídeos");
+        }
+    }
+    @Test
+    void CT39_Home_AssistirVideo() {
+        try {
+            Thread.sleep(4000);
+            irAteAHome();
+
+            String tituloVideo = "Selenium (Testes Automatizados)";
+            assertTrue(menuHomePage.videoEstaListado(tituloVideo), 
+                "O vídeo precisa estar listado para ser assistido.");
+            assertTrue(menuHomePage.playerDeVideoEstaVisivel(tituloVideo), 
+                "O player de vídeo não foi carregado corretamente na Home.");
+        } catch (Exception e) {
+            System.err.println("Falha no CT39_Home: " + e.getMessage());
+            fail("Erro ao verificar player de vídeo na Home");
+        }
+    } 
+    @Test
+    void CT39_1_Home_ValidarFonteDoPlayerYoutube() {
+        try {
+            Thread.sleep(4000);
+            irAteAHome();
+
+            String tituloVideo = "Selenium (Testes Automatizados)";
+            assertTrue(menuHomePage.playerDeVideoEstaVisivel(tituloVideo), 
+                "O player de vídeo não está visível.");
+            String srcVideo = menuHomePage.pegarFonteDoVideo(tituloVideo);
+            
+            System.out.println("Fonte do vídeo encontrada: " + srcVideo);
+            assertNotNull(srcVideo, "O atributo 'src' do vídeo está nulo.");
+            assertTrue(srcVideo.contains("youtube.com") || srcVideo.contains("youtu.be"), 
+                "O player não carregou um vídeo válido do YouTube. Fonte atual: " + srcVideo);
+
+        } catch (Exception e) {
+            System.err.println("Falha no CT39_1: " + e.getMessage());
+            fail("Erro ao validar a fonte do player de vídeo");
+        }
+    }
+
 }
+
