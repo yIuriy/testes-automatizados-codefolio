@@ -54,24 +54,25 @@ public class MenuHomeTest {
         try {
             Thread.sleep(4000);
             irAteAHome();
+            String titulo = "Selenium (Testes Automatizados)";
 
-            int numLikesInicial = menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)");
+            int numLikesInicial = menuHomePage.pegarNumeroDeLikes(titulo);
 
-            menuHomePage.clicarEmLike("Selenium (Testes Automatizados)");
-            Thread.sleep(3000);
-            assertEquals(numLikesInicial + 1, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
+            menuHomePage.clicarEmLike(titulo);
+            Thread.sleep(1000);
+            assertEquals(numLikesInicial + 1, menuHomePage.pegarNumeroDeLikes(titulo));
 
-            menuHomePage.clicarEmLike("Selenium (Testes Automatizados)");
-            Thread.sleep(3000);
-            assertEquals(numLikesInicial, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
+            menuHomePage.clicarEmLike(titulo);
+            Thread.sleep(1000);
+            assertEquals(numLikesInicial, menuHomePage.pegarNumeroDeLikes(titulo));
 
-            menuHomePage.clicarEmDislike("Selenium (Testes Automatizados)");
-            Thread.sleep(3000);
-            assertEquals(numLikesInicial - 1, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
+            menuHomePage.clicarEmDislike(titulo);
+            Thread.sleep(1000);
+            assertEquals(numLikesInicial - 1, menuHomePage.pegarNumeroDeLikes(titulo));
 
-            menuHomePage.clicarEmDislike("Selenium (Testes Automatizados)");
-            Thread.sleep(3000);
-            assertEquals(numLikesInicial, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
+            menuHomePage.clicarEmDislike(titulo);
+            Thread.sleep(1000);
+            assertEquals(numLikesInicial, menuHomePage.pegarNumeroDeLikes(titulo));
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -89,18 +90,20 @@ public class MenuHomeTest {
             Thread.sleep(4000);
             irAteAHome();
 
-            int numLikesInicial = menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)");
+            String titulo = "Selenium (Testes Automatizados)";
 
-            menuHomePage.clicarEmLike("Selenium (Testes Automatizados)");
-            Thread.sleep(3000);
+            int numLikesInicial = menuHomePage.pegarNumeroDeLikes(titulo);
 
-            menuHomePage.clicarEmDislike("Selenium (Testes Automatizados)");
-            Thread.sleep(3000);
-            assertEquals(numLikesInicial - 1, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
+            menuHomePage.clicarEmLike(titulo);
+            Thread.sleep(1000);
 
-            menuHomePage.clicarEmLike("Selenium (Testes Automatizados)");
-            Thread.sleep(3000);
-            assertEquals(numLikesInicial + 1, menuHomePage.pegarNumeroDeLikes("Selenium (Testes Automatizados)"));
+            menuHomePage.clicarEmDislike(titulo);
+            Thread.sleep(1000);
+            assertEquals(numLikesInicial - 1, menuHomePage.pegarNumeroDeLikes(titulo));
+
+            menuHomePage.clicarEmLike(titulo);
+            Thread.sleep(1000);
+            assertEquals(numLikesInicial + 1, menuHomePage.pegarNumeroDeLikes(titulo));
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
