@@ -65,6 +65,12 @@ public class ExtraMaterialPage {
         botao.click();
     }
 
+    //Vai dar erro, pois o botão não existe
+    public void clicarBotaoEditarDoPrimeiroMaterial() {
+        WebElement botao = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div/div[2]/div[1]/div[5]/ul/li/div[2]/button[2]")));
+        botao.click();
+    }
+
     public void clicarBotaoExcluirDoPrimeiroMaterial() {
         WebElement botao = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div/div[2]/div[1]/div[5]/ul/li/div[2]/button")));
         botao.click();
@@ -73,6 +79,14 @@ public class ExtraMaterialPage {
     public void clicarBotaoConfirmarExclusaoMaterial() {
         WebElement botao = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/div[2]/div[3]/div/button[1]")));
         botao.click();
+    }
+
+    public void verificarSeMaterialFoiEditado() {
+        assertDoesNotThrow(() -> { // Não deve lançar timeout exception
+            WebElement div = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div/section[2]/div/div[contains(text(), 'Material editado com sucesso!')]"))); // Botão não existe
+            System.out.println(div.getText());
+            assertEquals("Material editado com sucesso!", div.getText());
+        });
     }
 
     public void verificarSeMaterialFoiExcluido() {

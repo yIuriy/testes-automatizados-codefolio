@@ -11,6 +11,8 @@ import utils.Authentication;
 
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class ExtraMaterialCourseTest {
     WebDriver driver;
     Authentication authentication;
@@ -53,7 +55,22 @@ public class ExtraMaterialCourseTest {
     // O sistema não permite realizar alterações em um material extra após ele ser adicionado
     @Test
     void CT012() {
-        System.out.println("CT012");
+        try{
+            Thread.sleep(5000);
+            irAteAPaginaDeGerenciarCursos();
+            manageCoursePage.clicarBotaoGerenciarCursoPorNomeDoCurso("Grupo 01");
+            manageCoursePage.localizarEClicarNoMenuPorNome("Materiais Extras");
+            extraMaterialPage.clicarBotaoEditarDoPrimeiroMaterial(); // Botão não existe
+            extraMaterialPage.inserirTituloMaterialExtra("Wiki Furret");
+            extraMaterialPage.inserirLinkMaterialExtra("https://bulbapedia.bulbagarden.net/wiki/Furret_(Pok%C3%A9mon)");
+            extraMaterialPage.clicarBotaoAdicionarMaterial();
+            extraMaterialPage.verificarSeMaterialFoiEditado();
+            extraMaterialPage.clicarBotaoOkMaterial();
+            System.out.println("O Material foi editado com sucesso!");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            fail("O teste deve falhar se o botão Editar não existir: " + e.getMessage());
+        }
     }
 
     @Test
