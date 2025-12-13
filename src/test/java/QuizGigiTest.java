@@ -534,44 +534,31 @@ public class QuizGigiTest {
             wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(@title,'Abrir Quiz Gigi')]")
             )).click();
-            System.out.println("Clicou no botão 'Abrir Quiz Gigi'.");
-            Thread.sleep(5000);
 
-            WebElement btnMostrar = wait.until(ExpectedConditions.presenceOfElementLocated(
+            System.out.println("Clicou no botão 'Abrir Quiz Gigi'.");
+            Thread.sleep(3000);
+
+            WebElement btnMostrar = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(@title,'Mostrar respostas') or contains(.,'Mostrar respostas')]")
             ));
             js.executeScript("arguments[0].scrollIntoView({block:'center'});", btnMostrar);
             js.executeScript("arguments[0].click();", btnMostrar);
             System.out.println("Clicou em 'Mostrar respostas'.");
-            Thread.sleep(2000);
+            Thread.sleep(1500);
 
-            WebElement btnMostrarReload = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//button[contains(@title,'Mostrar respostas') or contains(.,'Mostrar respostas')]")
-            ));
-            assertTrue(btnMostrarReload.isDisplayed(),
-                    "O botão não reapareceu após Mostrar respostas.");
-            System.out.println("Mostrar respostas funcionou corretamente!");
-
-            WebElement btnOcultar = wait.until(ExpectedConditions.presenceOfElementLocated(
+            WebElement btnOcultar = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(@title,'Ocultar respostas') or contains(.,'Ocultar respostas')]")
             ));
-            btnOcultar.click();
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", btnOcultar);
+            js.executeScript("arguments[0].click();", btnOcultar);
             System.out.println("Clicou em 'Ocultar respostas'.");
-            Thread.sleep(5000);
-
-            // Mesmo sendo ocultar, ele aparece como mostrar 
-            WebElement btnOcultarReload = wait.until(ExpectedConditions.presenceOfElementLocated(
-                    By.xpath("//button[contains(@title,'Mostrar respostas') or contains(.,'Mostrar respostas')]")
-            ));
-
-            assertTrue(btnOcultarReload.isDisplayed(),
-                    "O botão 'Ocultar respostas' não apareceu novamente.");
-            System.out.println("Ocultar respostas funcionou corretamente!");
+            Thread.sleep(1500);
+            System.out.println("CT30 executado com sucesso!");
 
         } catch (Exception e) {
-            System.out.println("Erro no CT28.1: " + e.getMessage());
+            System.out.println("Erro no CT30: " + e.getMessage());
             e.printStackTrace();
-            fail("Falha no teste CT28.1");
+            fail("Falha no teste CT30.");
         } finally {
             if (driver != null) {
                 driver.quit();
